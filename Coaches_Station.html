@@ -6889,8 +6889,8 @@ function renderH2H() {
       if (!panelEl) return;
       try {
         const [statsRes, rosterRes] = await Promise.all([
-          fetch(`https://corsproxy.io/?url=https://api-web.nhle.com/v1/club-stats/${teamB}/20252026/2`),
-          fetch(`https://corsproxy.io/?url=https://api-web.nhle.com/v1/roster/${teamB}/current`)
+          fetch(`https://api-web.nhle.com/v1/club-stats/${teamB}/20252026/2`),
+          fetch(`https://api-web.nhle.com/v1/roster/${teamB}/current`)
         ]);
         if (!statsRes.ok || !rosterRes.ok) throw new Error('API error');
         const statsData  = await statsRes.json();
@@ -6919,7 +6919,7 @@ function renderH2H() {
         }
 
         // Fetch teamB's recent schedule from NHL API to get last 5 game dates
-        const schedRes = await fetch(`https://corsproxy.io/?url=https://api-web.nhle.com/v1/club-schedule-season/${teamB}/20252026`);
+        const schedRes = await fetch(`https://api-web.nhle.com/v1/club-schedule-season/${teamB}/20252026`);
         let teamBDates = new Set();
         if (schedRes.ok) {
           const schedData = await schedRes.json();
@@ -6978,7 +6978,7 @@ function renderH2H() {
         // Fetch last 5 game logs for wider pool in parallel
         const logResults = await Promise.all(
           l5Pool.map(p =>
-            fetch(`https://corsproxy.io/?url=https://api-web.nhle.com/v1/player/${p.playerId}/game-log/20252026/2`)
+            fetch(`https://api-web.nhle.com/v1/player/${p.playerId}/game-log/20252026/2`)
               .then(r => r.ok ? r.json() : null)
               .catch(() => null)
           )

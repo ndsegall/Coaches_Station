@@ -6805,7 +6805,7 @@ function renderH2H() {
       <style>
         .vc-layout { display:grid; grid-template-columns: 1fr 1fr auto; gap:0.75rem; align-items:stretch; }
         .vc-stat-col { display:flex; flex-direction:column; gap:0; min-width:0; }
-        .vc-player-col { display:flex; flex-direction:column; gap:0.5rem; width:320px; }
+        .vc-player-col { display:flex; flex-direction:column; gap:0.5rem; width:auto; min-width:0; }
         .vc-player-col #vc-player-panel, .vc-player-col #vc-l5-player-panel { flex:1; }
         @media (max-width:1200px) {
           .vc-layout { grid-template-columns: 1fr 1fr; }
@@ -6916,7 +6916,7 @@ function renderH2H() {
         const defsPool = skaters.filter(s => s.positionCode === 'D').slice(0, 6);
         const l5Pool   = [...fwdsPool, ...defsPool];
 
-        const GRID = 'minmax(80px,140px) 26px 26px 26px 26px 30px 30px 42px';
+        const GRID = 'max-content 26px 26px 26px 26px 30px 30px 42px';
 
         function buildHeaderRow() {
           return `<div style="display:grid;grid-template-columns:${GRID};gap:0;align-items:center;padding:0.18rem 0.5rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);border-bottom:1px solid var(--border);">

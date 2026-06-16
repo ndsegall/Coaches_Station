@@ -6916,7 +6916,7 @@ function renderH2H() {
         const defsPool = skaters.filter(s => s.positionCode === 'D').slice(0, 6);
         const l5Pool   = [...fwdsPool, ...defsPool];
 
-        const GRID = '1fr 26px 26px 26px 26px 30px 30px 42px';
+        const GRID = 'minmax(80px,140px) 26px 26px 26px 26px 30px 30px 42px';
 
         function buildHeaderRow() {
           return `<div style="display:grid;grid-template-columns:${GRID};gap:0;align-items:center;padding:0.18rem 0.5rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);border-bottom:1px solid var(--border);">
@@ -7081,19 +7081,19 @@ function renderH2H() {
 
         if (depthLoadingEl) depthLoadingEl.remove();
         if (depthPanelEl) depthPanelEl.insertAdjacentHTML('beforeend', `
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0.4rem 0.5rem 0.4rem;">
-            <div style="display:flex;flex-direction:column;align-items:center;gap:0.15rem;padding:0.35rem;">
-              <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:${aColor};">${nameA}</div>
-              <div style="font-size:1.4rem;font-weight:700;color:var(--text1);line-height:1.1;">${dA.score.toFixed(3)}</div>
-              <div style="font-size:0.6rem;color:var(--text3);">${dA.n} qualifying skaters</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0.2rem 0.5rem 0.1rem;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.08rem;padding:0.2rem;">
+              <div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:${aColor};">${nameA}</div>
+              <div style="font-size:1.2rem;font-weight:700;color:var(--text1);line-height:1.1;">${dA.score.toFixed(3)}</div>
+              <div style="font-size:0.58rem;color:var(--text3);">${dA.n} qualifying skaters</div>
             </div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:0.15rem;padding:0.35rem;border-left:1px solid var(--border);">
-              <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:${bColor};">${nameB}</div>
-              <div style="font-size:1.4rem;font-weight:700;color:var(--text1);line-height:1.1;">${dB.score.toFixed(3)}</div>
-              <div style="font-size:0.6rem;color:var(--text3);">${dB.n} qualifying skaters</div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.08rem;padding:0.2rem;border-left:1px solid var(--border);">
+              <div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:${bColor};">${nameB}</div>
+              <div style="font-size:1.2rem;font-weight:700;color:var(--text1);line-height:1.1;">${dB.score.toFixed(3)}</div>
+              <div style="font-size:0.58rem;color:var(--text3);">${dB.n} qualifying skaters</div>
             </div>
           </div>
-          <div style="padding:0 0.5rem 0.3rem;font-size:0.6rem;color:var(--text3);text-align:center;">Avg P/GP — qualifying forwards + top 4 D (60+ GP or 0.7+ P/GP)</div>
+          <div style="padding:0 0.5rem 0.2rem;font-size:0.58rem;color:var(--text3);text-align:center;">Avg P/GP — qualifying forwards + top 4 D (60+ GP or 0.7+ P/GP)</div>
         `);
 
       } catch(e) {

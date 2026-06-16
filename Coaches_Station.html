@@ -6912,7 +6912,23 @@ function renderH2H() {
         const defsPool = skaters.filter(s => s.positionCode === 'D').slice(0, 6);
         const l5Pool = [...fwdsPool, ...defsPool];
 
-        const GRID = '1fr 28px 28px 28px 28px 32px 32px 44px';
+        // Normalize a game log date to YYYY-MM-DD
+        function normalizeDate(d) {
+          if (!d) return '';
+          return String(d).substring(0, 10);
+        }
+
+        // Fetch teamB's recent schedule from NHL API to get last 5 game dates
+        const schedRes = await fetch(`https://corsproxy.io/?url=https://api-web.nhle.com/v1/club-schedule-season/${teamB}/20252026`);
+        let teamBDates = new Set();
+        if (schedRes.ok) {
+          const schedData = await schedRes.json();
+          const played = (schedData.games || [])
+            .filter(g => g.gameType === 2 && g.gameState === 'OFF')
+            .sort((a, b) => b.gameDate.localeCompare(a.gameDate))
+            .slice(0, 5);
+          teamBDates = new Set(played.map(g => normalizeDate(g.gameDate)));
+        }
 
         function buildHeaderRow() {
           return `<div style="display:grid;grid-template-columns:${GRID};gap:0;align-items:center;padding:0.18rem 0.5rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);border-bottom:1px solid var(--border);">
@@ -6967,10 +6983,14 @@ function renderH2H() {
           )
         );
 
-        // Compute L5 points for each player in the pool
+        // Compute L5 points for each player filtered to teamB's last 5 dates
+        function getTeamGames(log) {
+          return (log && log.gameLog ? log.gameLog : [])
+            .filter(g => teamBDates.has(normalizeDate(g.gameDate)));
+        }
+
         function getL5Points(log) {
-          const games = (log && log.gameLog ? log.gameLog : []).slice(0, 5);
-          return games.reduce((s,g) => s + (g.points||0), 0);
+          return getTeamGames(log).reduce((s,g) => s + (g.points||0), 0);
         }
 
         const l5FwdsRanked = l5Pool
@@ -6991,7 +7011,7 @@ function renderH2H() {
           const displayName = `${num} ${lastName}`.trim();
           const pos = isDef ? 'D' : p.positionCode;
 
-          const games = (log && log.gameLog ? log.gameLog : []).slice(0, 5);
+          const games = getTeamGames(log);
           const gp  = games.length;
           const g   = games.reduce((s,g) => s + (g.goals||0), 0);
           const a   = games.reduce((s,g) => s + (g.assists||0), 0);

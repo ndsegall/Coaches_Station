@@ -6850,6 +6850,10 @@ function renderH2H() {
             <div class="h2h-overview-title">${nameB.toUpperCase()} LAST 5 LEADERS</div>
             <div id="vc-l5-player-loading" style="padding:1rem 0.75rem;font-size:0.78rem;color:var(--text3);">Loading...</div>
           </div>
+          <div class="h2h-overview" id="vc-depth-panel">
+            <div class="h2h-overview-title">SCORING DEPTH</div>
+            <div id="vc-depth-loading" style="padding:1rem 0.75rem;font-size:0.78rem;color:var(--text3);">Loading...</div>
+          </div>
         </div>
       </div>
       <div style="margin-top:1rem;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
@@ -7045,9 +7049,57 @@ function renderH2H() {
           + buildSectionLabel('Defense')  + l5DefsRanked.map(r => l5PlayerRow(r.p, true,  r.log)).join('')
         );
 
+        // Fetch teamA stats for depth score comparison
+        const depthLoadingEl = document.getElementById('vc-depth-loading');
+        const depthPanelEl   = document.getElementById('vc-depth-panel');
+        const statsARes = await fetch(`${PROXY}https://api-web.nhle.com/v1/club-stats/${teamA}/20252026/2`);
+        if (!statsARes.ok) throw new Error('API error');
+        const statsAData = await statsARes.json();
+
+        function depthScore(skatersArr) {
+          const fwdQual = skatersArr
+            .filter(p => p.positionCode !== 'D')
+            .filter(p => p.gamesPlayed >= 60 || (p.gamesPlayed > 0 && p.points / p.gamesPlayed >= 0.7));
+          const defQual = skatersArr
+            .filter(p => p.positionCode === 'D')
+            .filter(p => p.gamesPlayed >= 60 || (p.gamesPlayed > 0 && p.points / p.gamesPlayed >= 0.7))
+            .sort((a, b) => b.points - a.points)
+            .slice(0, 4);
+          const all = [...fwdQual, ...defQual];
+          if (!all.length) return { score: 0, n: 0 };
+          const avg = all.reduce((s, p) => s + p.points / p.gamesPlayed, 0) / all.length;
+          return { score: avg, n: all.length };
+        }
+
+        const dA = depthScore(statsAData.skaters || []);
+        const dB = depthScore(statsData.skaters || []);
+
+        const aColor = 'var(--team-a)';
+        const bColor = 'var(--team-b)';
+        const aWins  = dA.score >= dB.score;
+
+        if (depthLoadingEl) depthLoadingEl.remove();
+        if (depthPanelEl) depthPanelEl.insertAdjacentHTML('beforeend', `
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0.5rem 0.75rem 0.75rem;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.25rem;padding:0.5rem;">
+              <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:${aColor};">${nameA}</div>
+              <div style="font-size:2rem;font-weight:700;color:var(--text1);line-height:1;">${dA.score.toFixed(3)}</div>
+              <div style="font-size:0.65rem;color:var(--text3);">${dA.n} qualifying skaters</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.25rem;padding:0.5rem;border-left:1px solid var(--border);">
+              <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:${bColor};">${nameB}</div>
+              <div style="font-size:2rem;font-weight:700;color:var(--text1);line-height:1;">${dB.score.toFixed(3)}</div>
+              <div style="font-size:0.65rem;color:var(--text3);">${dB.n} qualifying skaters</div>
+            </div>
+          </div>
+          <div style="padding:0 0.75rem 0.5rem;font-size:0.65rem;color:var(--text3);text-align:center;">Avg P/GP across qualifying forwards + top 4 D (60+ GP or 0.7+ P/GP)</div>
+        `);
+
       } catch(e) {
         if (loadingEl)   loadingEl.textContent   = 'Player data unavailable (requires internet)';
         if (l5LoadingEl) l5LoadingEl.textContent = 'Player data unavailable (requires internet)';
+        const depthLoadingEl = document.getElementById('vc-depth-loading');
+        if (depthLoadingEl) depthLoadingEl.textContent = 'Depth data unavailable (requires internet)';
       }
     })();
 

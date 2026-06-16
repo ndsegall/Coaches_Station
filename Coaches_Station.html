@@ -6868,18 +6868,28 @@ function renderH2H() {
       const panelEl   = document.getElementById('vc-player-panel');
       if (!panelEl) return;
       try {
-        const res = await fetch(`https://corsproxy.io/?url=https://api-web.nhle.com/v1/club-stats/${teamB}/20252026/2`);
-        if (!res.ok) throw new Error('API error');
-        const data = await res.json();
+        const [statsRes, rosterRes] = await Promise.all([
+          fetch(`https://corsproxy.io/?url=https://api-web.nhle.com/v1/club-stats/${teamB}/20252026/2`),
+          fetch(`https://corsproxy.io/?url=https://api-web.nhle.com/v1/roster/${teamB}/current`)
+        ]);
+        if (!statsRes.ok || !rosterRes.ok) throw new Error('API error');
+        const statsData  = await statsRes.json();
+        const rosterData = await rosterRes.json();
 
-        const skaters = (data.skaters || []).sort((a,b) => b.points - a.points);
+        // Build playerId -> sweaterNumber map from roster
+        const jerseyMap = {};
+        [...(rosterData.forwards||[]), ...(rosterData.defensemen||[]), ...(rosterData.goalies||[])].forEach(p => {
+          jerseyMap[p.id] = p.sweaterNumber;
+        });
+
+        const skaters = (statsData.skaters || []).sort((a,b) => b.points - a.points);
         const fwds = skaters.filter(s => s.positionCode !== 'D').slice(0, 5);
         const defs = skaters.filter(s => s.positionCode === 'D').slice(0, 3);
 
         function playerRow(p, isDef) {
           const lastName = p.lastName.default.toUpperCase();
-          const num  = p.sweaterNumber !== undefined ? p.sweaterNumber : '';
-          const displayName = `${num} ${lastName}`;
+          const num  = jerseyMap[p.playerId] !== undefined ? jerseyMap[p.playerId] : '';
+          const displayName = `${num} ${lastName}`.trim();
           const pos  = isDef ? 'D' : p.positionCode;
           const pm   = p.plusMinus >= 0 ? `+${p.plusMinus}` : `${p.plusMinus}`;
           return `<div style="display:grid;grid-template-columns:1fr 28px 28px 28px 28px 32px 32px;gap:0;align-items:center;padding:0.2rem 0.5rem;border-bottom:1px solid var(--border);font-size:0.73rem;">

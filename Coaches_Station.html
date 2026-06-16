@@ -6920,14 +6920,20 @@ function renderH2H() {
 
         // Fetch teamB's recent schedule from NHL API to get last 5 game dates
         const schedRes = await fetch(`https://corsproxy.io/?url=https://api-web.nhle.com/v1/club-schedule-season/${teamB}/20252026`);
+        console.log('Schedule response status:', schedRes.status, schedRes.ok);
         let teamBDates = new Set();
         if (schedRes.ok) {
           const schedData = await schedRes.json();
-          const played = (schedData.games || [])
+          console.log('Schedule games total:', (schedData.games||[]).length);
+          const allGames = schedData.games || [];
+          console.log('Sample gameType/gameState:', allGames.slice(0,3).map(g => `${g.gameType}/${g.gameState}/${g.gameDate}`));
+          const played = allGames
             .filter(g => g.gameType === 2 && g.gameState === 'FINAL')
             .sort((a, b) => b.gameDate.localeCompare(a.gameDate))
             .slice(0, 5);
+          console.log('Last 5 games found:', played.map(g => g.gameDate));
           teamBDates = new Set(played.map(g => normalizeDate(g.gameDate)));
+          console.log('teamBDates:', [...teamBDates]);
         }
 
         function buildHeaderRow() {

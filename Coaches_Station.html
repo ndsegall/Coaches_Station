@@ -6803,9 +6803,10 @@ function renderH2H() {
 
     content.innerHTML=`
       <style>
-        .vc-layout { display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr); gap:1rem; align-items:flex-start; }
+        .vc-layout { display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,280px); gap:1rem; align-items:stretch; }
         .vc-stat-col { display:flex; flex-direction:column; gap:0; min-width:0; }
-        .vc-player-col { display:flex; flex-direction:column; gap:0.75rem; min-width:0; }
+        .vc-player-col { display:flex; flex-direction:column; gap:0.5rem; min-width:0; }
+        .vc-player-col .h2h-overview { flex:1; }
         @media (max-width:1200px) {
           .vc-layout { grid-template-columns: 1fr 1fr; }
           .vc-player-col { grid-column: 1 / -1; flex-direction:row; gap:1rem; }
@@ -6915,7 +6916,7 @@ function renderH2H() {
         const defsPool = skaters.filter(s => s.positionCode === 'D').slice(0, 6);
         const l5Pool   = [...fwdsPool, ...defsPool];
 
-        const GRID = '1fr 28px 28px 28px 28px 32px 32px 44px';
+        const GRID = '1fr 24px 24px 24px 24px 28px 28px 38px';
 
         function buildHeaderRow() {
           return `<div style="display:grid;grid-template-columns:${GRID};gap:0;align-items:center;padding:0.18rem 0.5rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);border-bottom:1px solid var(--border);">
@@ -6941,7 +6942,7 @@ function renderH2H() {
           const pos = isDef ? 'D' : p.positionCode;
           const pm  = p.plusMinus >= 0 ? `+${p.plusMinus}` : `${p.plusMinus}`;
           const toi = fmtTOI(p.avgTimeOnIcePerGame);
-          return `<div style="display:grid;grid-template-columns:${GRID};gap:0;align-items:center;padding:0.2rem 0.5rem;border-bottom:1px solid var(--border);font-size:0.73rem;">
+          return `<div style="display:grid;grid-template-columns:${GRID};gap:0;align-items:center;padding:0.15rem 0.4rem;border-bottom:1px solid var(--border);font-size:0.71rem;">
             <span style="color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${displayName}">${displayName} <span style="color:var(--text3);font-size:0.65rem;">${pos}</span></span>
             <span style="text-align:center;color:var(--text2);">${p.gamesPlayed}</span>
             <span style="text-align:center;color:var(--text2);">${p.goals}</span>
@@ -7010,7 +7011,7 @@ function renderH2H() {
             toiStr = fmtTOI(totalSecs / gp);
           }
 
-          return `<div style="display:grid;grid-template-columns:${GRID};gap:0;align-items:center;padding:0.2rem 0.5rem;border-bottom:1px solid var(--border);font-size:0.73rem;">
+          return `<div style="display:grid;grid-template-columns:${GRID};gap:0;align-items:center;padding:0.15rem 0.4rem;border-bottom:1px solid var(--border);font-size:0.71rem;">
             <span style="color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${displayName}">${displayName} <span style="color:var(--text3);font-size:0.65rem;">${pos}</span></span>
             <span style="text-align:center;color:var(--text2);">${gp}</span>
             <span style="text-align:center;color:var(--text2);">${g}</span>
@@ -7080,19 +7081,19 @@ function renderH2H() {
 
         if (depthLoadingEl) depthLoadingEl.remove();
         if (depthPanelEl) depthPanelEl.insertAdjacentHTML('beforeend', `
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0.5rem 0.75rem 0.75rem;">
-            <div style="display:flex;flex-direction:column;align-items:center;gap:0.25rem;padding:0.5rem;">
-              <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:${aColor};">${nameA}</div>
-              <div style="font-size:2rem;font-weight:700;color:var(--text1);line-height:1;">${dA.score.toFixed(3)}</div>
-              <div style="font-size:0.65rem;color:var(--text3);">${dA.n} qualifying skaters</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0.4rem 0.5rem 0.4rem;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.15rem;padding:0.35rem;">
+              <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:${aColor};">${nameA}</div>
+              <div style="font-size:1.4rem;font-weight:700;color:var(--text1);line-height:1.1;">${dA.score.toFixed(3)}</div>
+              <div style="font-size:0.6rem;color:var(--text3);">${dA.n} qualifying skaters</div>
             </div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:0.25rem;padding:0.5rem;border-left:1px solid var(--border);">
-              <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:${bColor};">${nameB}</div>
-              <div style="font-size:2rem;font-weight:700;color:var(--text1);line-height:1;">${dB.score.toFixed(3)}</div>
-              <div style="font-size:0.65rem;color:var(--text3);">${dB.n} qualifying skaters</div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0.15rem;padding:0.35rem;border-left:1px solid var(--border);">
+              <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:${bColor};">${nameB}</div>
+              <div style="font-size:1.4rem;font-weight:700;color:var(--text1);line-height:1.1;">${dB.score.toFixed(3)}</div>
+              <div style="font-size:0.6rem;color:var(--text3);">${dB.n} qualifying skaters</div>
             </div>
           </div>
-          <div style="padding:0 0.75rem 0.5rem;font-size:0.65rem;color:var(--text3);text-align:center;">Avg P/GP across qualifying forwards + top 4 D (60+ GP or 0.7+ P/GP)</div>
+          <div style="padding:0 0.5rem 0.4rem;font-size:0.6rem;color:var(--text3);text-align:center;">Avg P/GP — qualifying forwards + top 4 D (60+ GP or 0.7+ P/GP)</div>
         `);
 
       } catch(e) {

@@ -6803,13 +6803,13 @@ function renderH2H() {
 
     content.innerHTML=`
       <style>
-        .vc-layout { display:grid; grid-template-columns: 28% 28% 1fr; gap:0.75rem; align-items:stretch; }
+        .vc-layout { display:grid; grid-template-columns: 1fr 1fr auto; gap:0.75rem; align-items:stretch; }
         .vc-stat-col { display:flex; flex-direction:column; gap:0; min-width:0; }
-        .vc-player-col { display:flex; flex-direction:column; gap:0.5rem; min-width:0; }
+        .vc-player-col { display:flex; flex-direction:column; gap:0.5rem; width:320px; }
         .vc-player-col #vc-player-panel, .vc-player-col #vc-l5-player-panel { flex:1; }
         @media (max-width:1200px) {
           .vc-layout { grid-template-columns: 1fr 1fr; }
-          .vc-player-col { grid-column: 1 / -1; flex-direction:row; gap:1rem; }
+          .vc-player-col { grid-column: 1 / -1; flex-direction:row; gap:1rem; width:auto; }
           .vc-player-col .h2h-overview { flex:1; min-width:0; }
         }
         @media (max-width:700px) {

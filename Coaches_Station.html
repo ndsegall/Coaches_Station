@@ -6832,6 +6832,10 @@ function renderH2H() {
             <div class="h2h-overview-title">${nameB.toUpperCase()} SEASON LEADERS</div>
             <div id="vc-player-loading" style="padding:1rem 0.75rem;font-size:0.78rem;color:var(--text3);">Loading...</div>
           </div>
+          <div class="h2h-overview" id="vc-l5-player-panel" style="min-height:120px;">
+            <div class="h2h-overview-title">${nameB.toUpperCase()} LAST 5 LEADERS</div>
+            <div id="vc-l5-player-loading" style="padding:1rem 0.75rem;font-size:0.78rem;color:var(--text3);">Loading...</div>
+          </div>
         </div>
 
       </div>
@@ -6862,10 +6866,12 @@ function renderH2H() {
       });
     });
 
-    // Fetch opponent season skater leaders from NHL API
+    // Fetch opponent season skater leaders + last 5 game logs from NHL API
     (async () => {
-      const loadingEl = document.getElementById('vc-player-loading');
-      const panelEl   = document.getElementById('vc-player-panel');
+      const loadingEl    = document.getElementById('vc-player-loading');
+      const panelEl      = document.getElementById('vc-player-panel');
+      const l5LoadingEl  = document.getElementById('vc-l5-player-loading');
+      const l5PanelEl    = document.getElementById('vc-l5-player-panel');
       if (!panelEl) return;
       try {
         const [statsRes, rosterRes] = await Promise.all([
@@ -6885,14 +6891,35 @@ function renderH2H() {
         const skaters = (statsData.skaters || []).sort((a,b) => b.points - a.points);
         const fwds = skaters.filter(s => s.positionCode !== 'D').slice(0, 5);
         const defs = skaters.filter(s => s.positionCode === 'D').slice(0, 3);
+        const top8 = [...fwds, ...defs];
 
-        function playerRow(p, isDef) {
+        const GRID = '1fr 28px 28px 28px 28px 32px 32px 44px';
+
+        function buildHeaderRow() {
+          return `<div style="display:grid;grid-template-columns:${GRID};gap:0;align-items:center;padding:0.18rem 0.5rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);border-bottom:1px solid var(--border);">
+            <span>Player</span><span style="text-align:center;">GP</span><span style="text-align:center;">G</span><span style="text-align:center;">A</span><span style="text-align:center;">PTS</span><span style="text-align:center;">PIM</span><span style="text-align:center;">+/-</span><span style="text-align:center;">AVG TOI</span>
+          </div>`;
+        }
+
+        function buildSectionLabel(label) {
+          return `<div style="padding:0.3rem 0.5rem 0.1rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);">${label}</div>`;
+        }
+
+        function fmtTOI(avg) {
+          if (!avg) return '—';
+          const mins = Math.floor(avg / 60);
+          const secs = String(Math.round(avg % 60)).padStart(2, '0');
+          return `${mins}:${secs}`;
+        }
+
+        function seasonPlayerRow(p, isDef) {
           const lastName = p.lastName.default.toUpperCase();
-          const num  = jerseyMap[p.playerId] !== undefined ? jerseyMap[p.playerId] : '';
+          const num = jerseyMap[p.playerId] !== undefined ? jerseyMap[p.playerId] : '';
           const displayName = `${num} ${lastName}`.trim();
-          const pos  = isDef ? 'D' : p.positionCode;
-          const pm   = p.plusMinus >= 0 ? `+${p.plusMinus}` : `${p.plusMinus}`;
-          return `<div style="display:grid;grid-template-columns:1fr 28px 28px 28px 28px 32px 32px;gap:0;align-items:center;padding:0.2rem 0.5rem;border-bottom:1px solid var(--border);font-size:0.73rem;">
+          const pos = isDef ? 'D' : p.positionCode;
+          const pm  = p.plusMinus >= 0 ? `+${p.plusMinus}` : `${p.plusMinus}`;
+          const toi = fmtTOI(p.avgTimeOnIcePerGame);
+          return `<div style="display:grid;grid-template-columns:${GRID};gap:0;align-items:center;padding:0.2rem 0.5rem;border-bottom:1px solid var(--border);font-size:0.73rem;">
             <span style="color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${displayName}">${displayName} <span style="color:var(--text3);font-size:0.65rem;">${pos}</span></span>
             <span style="text-align:center;color:var(--text2);">${p.gamesPlayed}</span>
             <span style="text-align:center;color:var(--text2);">${p.goals}</span>
@@ -6900,22 +6927,95 @@ function renderH2H() {
             <span style="text-align:center;font-weight:600;color:var(--text1);">${p.points}</span>
             <span style="text-align:center;color:var(--text2);">${p.penaltyMinutes}</span>
             <span style="text-align:center;color:var(--text2);font-size:0.68rem;">${pm}</span>
+            <span style="text-align:center;color:var(--text2);font-size:0.68rem;">${toi}</span>
           </div>`;
         }
 
-        const headerRow = `<div style="display:grid;grid-template-columns:1fr 28px 28px 28px 28px 32px 32px;gap:0;align-items:center;padding:0.18rem 0.5rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);border-bottom:1px solid var(--border);">
-          <span>Player</span><span style="text-align:center;">GP</span><span style="text-align:center;">G</span><span style="text-align:center;">A</span><span style="text-align:center;">PTS</span><span style="text-align:center;">PIM</span><span style="text-align:center;">+/-</span>
-        </div>`;
-
-        const fwdSection = `<div style="padding:0.3rem 0.5rem 0.1rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);">Forwards</div>`
-          + fwds.map(p => playerRow(p, false)).join('');
-        const defSection = `<div style="padding:0.3rem 0.5rem 0.1rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);">Defense</div>`
-          + defs.map(p => playerRow(p, true)).join('');
-
+        // Render season box
         if (loadingEl) loadingEl.remove();
-        panelEl.insertAdjacentHTML('beforeend', headerRow + fwdSection + defSection);
+        panelEl.insertAdjacentHTML('beforeend',
+          buildHeaderRow()
+          + buildSectionLabel('Forwards') + fwds.map(p => seasonPlayerRow(p, false)).join('')
+          + buildSectionLabel('Defense')  + defs.map(p => seasonPlayerRow(p, true)).join('')
+        );
+
+        // Fetch last 5 game logs for all 8 players in parallel
+        const logResults = await Promise.all(
+          top8.map(p =>
+            fetch(`https://corsproxy.io/?url=https://api-web.nhle.com/v1/player/${p.playerId}/game-log/20252026/2`)
+              .then(r => r.ok ? r.json() : null)
+              .catch(() => null)
+          )
+        );
+
+        function l5PlayerRow(p, isDef, log) {
+          const lastName = p.lastName.default.toUpperCase();
+          const num = jerseyMap[p.playerId] !== undefined ? jerseyMap[p.playerId] : '';
+          const displayName = `${num} ${lastName}`.trim();
+          const pos = isDef ? 'D' : p.positionCode;
+
+          const games = (log && log.gameLog ? log.gameLog : []).slice(0, 5);
+          const gp  = games.length;
+          const g   = games.reduce((s,g) => s + (g.goals||0), 0);
+          const a   = games.reduce((s,g) => s + (g.assists||0), 0);
+          const pts = games.reduce((s,g) => s + (g.points||0), 0);
+          const pim = games.reduce((s,g) => s + (g.penaltyMinutes||0), 0);
+          const pm  = games.reduce((s,g) => s + (g.plusMinus||0), 0);
+          const pmStr = pm >= 0 ? `+${pm}` : `${pm}`;
+
+          // avgTimeOnIcePerGame in game log may be seconds string like "18:32" or a number
+          let toiStr = '—';
+          if (gp > 0) {
+            const toiRaw = games[0].toi || games[0].timeOnIce || games[0].avgTimeOnIce;
+            if (typeof toiRaw === 'string' && toiRaw.includes(':')) {
+              // Already formatted — average the seconds
+              const totalSecs = games.reduce((s, gm) => {
+                const t = gm.toi || gm.timeOnIce || gm.avgTimeOnIce || '0:00';
+                const parts = t.split(':');
+                return s + parseInt(parts[0]||0)*60 + parseInt(parts[1]||0);
+              }, 0);
+              toiStr = fmtTOI(totalSecs / gp);
+            } else if (typeof toiRaw === 'number') {
+              const totalSecs = games.reduce((s,gm) => s + (gm.toi||gm.timeOnIce||gm.avgTimeOnIce||0), 0);
+              toiStr = fmtTOI(totalSecs / gp);
+            }
+          }
+
+          return `<div style="display:grid;grid-template-columns:${GRID};gap:0;align-items:center;padding:0.2rem 0.5rem;border-bottom:1px solid var(--border);font-size:0.73rem;">
+            <span style="color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${displayName}">${displayName} <span style="color:var(--text3);font-size:0.65rem;">${pos}</span></span>
+            <span style="text-align:center;color:var(--text2);">${gp}</span>
+            <span style="text-align:center;color:var(--text2);">${g}</span>
+            <span style="text-align:center;color:var(--text2);">${a}</span>
+            <span style="text-align:center;font-weight:600;color:var(--text1);">${pts}</span>
+            <span style="text-align:center;color:var(--text2);">${pim}</span>
+            <span style="text-align:center;color:var(--text2);font-size:0.68rem;">${pmStr}</span>
+            <span style="text-align:center;color:var(--text2);font-size:0.68rem;">${toiStr}</span>
+          </div>`;
+        }
+
+        // Sort L5 by points desc
+        const l5Rows = top8.map((p, i) => ({ p, isDef: i >= 5, log: logResults[i] }))
+          .sort((a, b) => {
+            const aGames = (a.log && a.log.gameLog ? a.log.gameLog : []).slice(0,5);
+            const bGames = (b.log && b.log.gameLog ? b.log.gameLog : []).slice(0,5);
+            const aPts = aGames.reduce((s,g) => s+(g.points||0), 0);
+            const bPts = bGames.reduce((s,g) => s+(g.points||0), 0);
+            return bPts - aPts;
+          });
+
+        const l5Fwds = l5Rows.filter(r => !r.isDef);
+        const l5Defs = l5Rows.filter(r => r.isDef);
+
+        if (l5LoadingEl) l5LoadingEl.remove();
+        if (l5PanelEl) l5PanelEl.insertAdjacentHTML('beforeend',
+          buildHeaderRow()
+          + buildSectionLabel('Forwards') + l5Fwds.map(r => l5PlayerRow(r.p, false, r.log)).join('')
+          + buildSectionLabel('Defense')  + l5Defs.map(r => l5PlayerRow(r.p, true,  r.log)).join('')
+        );
+
       } catch(e) {
-        if (loadingEl) loadingEl.textContent = 'Player data unavailable (requires internet)';
+        if (loadingEl)   loadingEl.textContent   = 'Player data unavailable (requires internet)';
+        if (l5LoadingEl) l5LoadingEl.textContent = 'Player data unavailable (requires internet)';
       }
     })();
 

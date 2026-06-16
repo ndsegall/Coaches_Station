@@ -6431,8 +6431,8 @@ function renderH2H() {
     },
     {
       label: 'PP + PK',
-      a: stMap[teamA] ? stMap[teamA].ppPct.toFixed(1)+' + '+stMap[teamA].pkPct.toFixed(1)+' = '+stMap[teamA].ppPlusPk.toFixed(1)+'%' : '—', aRank: stRanks[teamA]?.ppPlusPk,
-      b: stMap[teamB] ? stMap[teamB].ppPct.toFixed(1)+' + '+stMap[teamB].pkPct.toFixed(1)+' = '+stMap[teamB].ppPlusPk.toFixed(1)+'%' : '—', bRank: stRanks[teamB]?.ppPlusPk,
+      a: stMap[teamA] ? stMap[teamA].ppPlusPk.toFixed(1)+'%' : '—', aRank: stRanks[teamA]?.ppPlusPk,
+      b: stMap[teamB] ? stMap[teamB].ppPlusPk.toFixed(1)+'%' : '—', bRank: stRanks[teamB]?.ppPlusPk,
     },
   ];
 
@@ -6578,8 +6578,8 @@ function renderH2H() {
     { label:'PK xGA/2',                  a: l5A?(l5A.pkXgaPer60/30).toFixed(2):'—',                                     aRank: l5RankPkXga[teamA],   b: l5B?(l5B.pkXgaPer60/30).toFixed(2):'—',                                     bRank: l5RankPkXga[teamB] },
     { label:'Saves Above Expected',      a: l5A?l5A.gsax.toFixed(2):'—',                                                 aRank: l5RankGsax[teamA],    b: l5B?l5B.gsax.toFixed(2):'—',                                                 bRank: l5RankGsax[teamB] },
     { label:'PP + PK',
-      a: l5A?l5A.ppPct.toFixed(1)+' + '+l5A.pkPct.toFixed(1)+' = '+l5A.ppPlusPk.toFixed(1)+'%':'—', aRank: l5RankPpPk[teamA],
-      b: l5B?l5B.ppPct.toFixed(1)+' + '+l5B.pkPct.toFixed(1)+' = '+l5B.ppPlusPk.toFixed(1)+'%':'—', bRank: l5RankPpPk[teamB] },
+      a: l5A?l5A.ppPlusPk.toFixed(1)+'%':'—', aRank: l5RankPpPk[teamA],
+      b: l5B?l5B.ppPlusPk.toFixed(1)+'%':'—', bRank: l5RankPpPk[teamB] },
   ];
 
   const l5RowsHtml = l5Rows.map((row,i) => {

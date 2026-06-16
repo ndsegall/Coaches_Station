@@ -6827,7 +6827,7 @@ function renderH2H() {
           </div>
           ${vcChancePanel(`SCORING CHANCES &amp; RUSHES &#8212; ${nameB.toUpperCase()} (LAST 5)`, vcL5ChanceRows())}
         </div>
-        <div style="flex:0 0 260px;min-width:220px;display:flex;flex-direction:column;gap:0.75rem;">
+        <div style="flex:0 0 320px;min-width:280px;display:flex;flex-direction:column;gap:0.75rem;">
           <div class="h2h-overview" id="vc-player-panel" style="min-height:120px;">
             <div class="h2h-overview-title">${nameB.toUpperCase()} SEASON LEADERS</div>
             <div id="vc-player-loading" style="padding:1rem 0.75rem;font-size:0.78rem;color:var(--text3);">Loading...</div>
@@ -6877,21 +6877,24 @@ function renderH2H() {
         const defs = skaters.filter(s => s.positionCode === 'D').slice(0, 3);
 
         function playerRow(p, isDef) {
-          const name = `${p.firstName.default} ${p.lastName.default}`;
+          const lastName = p.lastName.default.toUpperCase();
+          const num  = p.sweaterNumber !== undefined ? p.sweaterNumber : '';
+          const displayName = `${num} ${lastName}`;
           const pos  = isDef ? 'D' : p.positionCode;
           const pm   = p.plusMinus >= 0 ? `+${p.plusMinus}` : `${p.plusMinus}`;
-          return `<div style="display:grid;grid-template-columns:1fr 28px 28px 28px 32px 28px;gap:0;align-items:center;padding:0.2rem 0.5rem;border-bottom:1px solid var(--border);font-size:0.73rem;">
-            <span style="color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${name}">${name} <span style="color:var(--text3);font-size:0.65rem;">${pos}</span></span>
+          return `<div style="display:grid;grid-template-columns:1fr 28px 28px 28px 28px 32px 32px;gap:0;align-items:center;padding:0.2rem 0.5rem;border-bottom:1px solid var(--border);font-size:0.73rem;">
+            <span style="color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${displayName}">${displayName} <span style="color:var(--text3);font-size:0.65rem;">${pos}</span></span>
+            <span style="text-align:center;color:var(--text2);">${p.gamesPlayed}</span>
             <span style="text-align:center;color:var(--text2);">${p.goals}</span>
             <span style="text-align:center;color:var(--text2);">${p.assists}</span>
             <span style="text-align:center;font-weight:600;color:var(--text1);">${p.points}</span>
-            <span style="text-align:center;color:var(--text3);font-size:0.68rem;">${p.pim}</span>
-            <span style="text-align:center;color:${p.plusMinus>=0?'#067a3f':'#c0392b'};font-size:0.68rem;">${pm}</span>
+            <span style="text-align:center;color:var(--text2);">${p.penaltyMinutes}</span>
+            <span style="text-align:center;color:var(--text2);font-size:0.68rem;">${pm}</span>
           </div>`;
         }
 
-        const headerRow = `<div style="display:grid;grid-template-columns:1fr 28px 28px 28px 32px 28px;gap:0;align-items:center;padding:0.18rem 0.5rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);border-bottom:1px solid var(--border);">
-          <span>Player</span><span style="text-align:center;">G</span><span style="text-align:center;">A</span><span style="text-align:center;">PTS</span><span style="text-align:center;">PIM</span><span style="text-align:center;">+/-</span>
+        const headerRow = `<div style="display:grid;grid-template-columns:1fr 28px 28px 28px 28px 32px 32px;gap:0;align-items:center;padding:0.18rem 0.5rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);border-bottom:1px solid var(--border);">
+          <span>Player</span><span style="text-align:center;">GP</span><span style="text-align:center;">G</span><span style="text-align:center;">A</span><span style="text-align:center;">PTS</span><span style="text-align:center;">PIM</span><span style="text-align:center;">+/-</span>
         </div>`;
 
         const fwdSection = `<div style="padding:0.3rem 0.5rem 0.1rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);">Forwards</div>`

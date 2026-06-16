@@ -6803,7 +6803,7 @@ function renderH2H() {
 
     content.innerHTML=`
       <div style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;">
-        <div style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:0;">
+        <div style="flex:0 0 340px;min-width:280px;display:flex;flex-direction:column;gap:0;">
           <div class="h2h-overview">
             <div class="h2h-overview-title">SEASON OVERVIEW</div>
             <div class="h2h-overview-grid">
@@ -6815,7 +6815,7 @@ function renderH2H() {
           </div>
           ${vcChancePanel(`SCORING CHANCES &amp; RUSHES &#8212; ${nameB.toUpperCase()} (SEASON)`, vcSeasonChanceRows())}
         </div>
-        <div style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:0;">
+        <div style="flex:0 0 340px;min-width:280px;display:flex;flex-direction:column;gap:0;">
           <div class="h2h-overview">
             <div class="h2h-overview-title">LAST 5 GAMES</div>
             <div class="h2h-overview-grid">
@@ -6827,7 +6827,7 @@ function renderH2H() {
           </div>
           ${vcChancePanel(`SCORING CHANCES &amp; RUSHES &#8212; ${nameB.toUpperCase()} (LAST 5)`, vcL5ChanceRows())}
         </div>
-        <div style="flex:0 0 320px;min-width:280px;display:flex;flex-direction:column;gap:0.75rem;">
+        <div style="flex:1;min-width:360px;display:flex;flex-direction:column;gap:0.75rem;">
           <div class="h2h-overview" id="vc-player-panel" style="min-height:120px;">
             <div class="h2h-overview-title">${nameB.toUpperCase()} SEASON LEADERS</div>
             <div id="vc-player-loading" style="padding:1rem 0.75rem;font-size:0.78rem;color:var(--text3);">Loading...</div>

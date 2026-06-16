@@ -6966,13 +6966,25 @@ function renderH2H() {
           )
         );
 
+        // Get teamB's last 5 regular season game dates from Excel data
+        const teamBDates = new Set(
+          filtered.filter(r => r.team === teamB)
+            .slice(-5)
+            .map(r => r.date)
+        );
+
+        function getTeamGames(log) {
+          return (log && log.gameLog ? log.gameLog : [])
+            .filter(g => teamBDates.has(String(g.gameDate).substring(0, 10)));
+        }
+
         function l5PlayerRow(p, isDef, log) {
           const lastName = p.lastName.default.toUpperCase();
           const num = jerseyMap[p.playerId] !== undefined ? jerseyMap[p.playerId] : '';
           const displayName = `${num} ${lastName}`.trim();
           const pos = isDef ? 'D' : p.positionCode;
 
-          const games = (log && log.gameLog ? log.gameLog : []).slice(0, 5);
+          const games = getTeamGames(log);
           const gp  = games.length;
           const g   = games.reduce((s,g) => s + (g.goals||0), 0);
           const a   = games.reduce((s,g) => s + (g.assists||0), 0);
@@ -7010,8 +7022,8 @@ function renderH2H() {
           .map((p, i) => ({ p, log: logResults[i] }))
           .filter(r => r.p.positionCode !== 'D')
           .sort((a, b) => {
-            const ag = (a.log&&a.log.gameLog?a.log.gameLog:[]).slice(0,5).reduce((s,g)=>s+(g.points||0),0);
-            const bg = (b.log&&b.log.gameLog?b.log.gameLog:[]).slice(0,5).reduce((s,g)=>s+(g.points||0),0);
+            const ag = getTeamGames(a.log).reduce((s,g)=>s+(g.points||0),0);
+            const bg = getTeamGames(b.log).reduce((s,g)=>s+(g.points||0),0);
             return bg - ag;
           })
           .slice(0, 5);
@@ -7020,8 +7032,8 @@ function renderH2H() {
           .map((p, i) => ({ p, log: logResults[i] }))
           .filter(r => r.p.positionCode === 'D')
           .sort((a, b) => {
-            const ag = (a.log&&a.log.gameLog?a.log.gameLog:[]).slice(0,5).reduce((s,g)=>s+(g.points||0),0);
-            const bg = (b.log&&b.log.gameLog?b.log.gameLog:[]).slice(0,5).reduce((s,g)=>s+(g.points||0),0);
+            const ag = getTeamGames(a.log).reduce((s,g)=>s+(g.points||0),0);
+            const bg = getTeamGames(b.log).reduce((s,g)=>s+(g.points||0),0);
             return bg - ag;
           })
           .slice(0, 3);

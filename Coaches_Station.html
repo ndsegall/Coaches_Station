@@ -6851,7 +6851,6 @@ function renderH2H() {
             <div id="vc-l5-player-loading" style="padding:1rem 0.75rem;font-size:0.78rem;color:var(--text3);">Loading...</div>
           </div>
         </div>
-
       </div>
       <div style="margin-top:1rem;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
         <div class="sched-header-row" style="border-radius:0;position:static;">
@@ -6882,15 +6881,16 @@ function renderH2H() {
 
     // Fetch opponent season skater leaders + last 5 game logs from NHL API
     (async () => {
-      const loadingEl    = document.getElementById('vc-player-loading');
-      const panelEl      = document.getElementById('vc-player-panel');
-      const l5LoadingEl  = document.getElementById('vc-l5-player-loading');
-      const l5PanelEl    = document.getElementById('vc-l5-player-panel');
+      const loadingEl   = document.getElementById('vc-player-loading');
+      const panelEl     = document.getElementById('vc-player-panel');
+      const l5LoadingEl = document.getElementById('vc-l5-player-loading');
+      const l5PanelEl   = document.getElementById('vc-l5-player-panel');
       if (!panelEl) return;
       try {
+        const PROXY = 'https://corsproxy.io/?url=';
         const [statsRes, rosterRes] = await Promise.all([
-          fetch(`https://api-web.nhle.com/v1/club-stats/${teamB}/20252026/2`),
-          fetch(`https://api-web.nhle.com/v1/roster/${teamB}/current`)
+          fetch(`${PROXY}https://api-web.nhle.com/v1/club-stats/${teamB}/20252026/2`),
+          fetch(`${PROXY}https://api-web.nhle.com/v1/roster/${teamB}/current`)
         ]);
         if (!statsRes.ok || !rosterRes.ok) throw new Error('API error');
         const statsData  = await statsRes.json();
@@ -6905,31 +6905,13 @@ function renderH2H() {
         const skaters = (statsData.skaters || []).sort((a,b) => b.points - a.points);
         const fwds = skaters.filter(s => s.positionCode !== 'D').slice(0, 5);
         const defs = skaters.filter(s => s.positionCode === 'D').slice(0, 3);
-        const top8 = [...fwds, ...defs];
 
-        // Wider pool for L5 — top 12 fwds + top 6 defs by season points
+        // Wider pool for L5
         const fwdsPool = skaters.filter(s => s.positionCode !== 'D').slice(0, 12);
         const defsPool = skaters.filter(s => s.positionCode === 'D').slice(0, 6);
-        const l5Pool = [...fwdsPool, ...defsPool];
+        const l5Pool   = [...fwdsPool, ...defsPool];
 
-        // Normalize a game log date to YYYY-MM-DD
-        function normalizeDate(d) {
-          if (!d) return '';
-          return String(d).substring(0, 10);
-        }
-
-        // Fetch teamB's recent schedule from NHL API to get last 5 game dates
-        const schedRes = await fetch(`https://api-web.nhle.com/v1/club-schedule-season/${teamB}/20252026`);
-        let teamBDates = new Set();
-        if (schedRes.ok) {
-          const schedData = await schedRes.json();
-          const allGames = schedData.games || [];
-          const played = allGames
-            .filter(g => g.gameType === 2 && g.gameState === 'OFF')
-            .sort((a, b) => b.gameDate.localeCompare(a.gameDate))
-            .slice(0, 5);
-          teamBDates = new Set(played.map(g => normalizeDate(g.gameDate)));
-        }
+        const GRID = '1fr 28px 28px 28px 28px 32px 32px 44px';
 
         function buildHeaderRow() {
           return `<div style="display:grid;grid-template-columns:${GRID};gap:0;align-items:center;padding:0.18rem 0.5rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);border-bottom:1px solid var(--border);">
@@ -6941,11 +6923,11 @@ function renderH2H() {
           return `<div style="padding:0.3rem 0.5rem 0.1rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);">${label}</div>`;
         }
 
-        function fmtTOI(avg) {
-          if (!avg) return '—';
-          const mins = Math.floor(avg / 60);
-          const secs = String(Math.round(avg % 60)).padStart(2, '0');
-          return `${mins}:${secs}`;
+        function fmtTOI(secs) {
+          if (!secs) return '—';
+          const m = Math.floor(secs / 60);
+          const s = String(Math.round(secs % 60)).padStart(2, '0');
+          return `${m}:${s}`;
         }
 
         function seasonPlayerRow(p, isDef) {
@@ -6978,33 +6960,11 @@ function renderH2H() {
         // Fetch last 5 game logs for wider pool in parallel
         const logResults = await Promise.all(
           l5Pool.map(p =>
-            fetch(`https://api-web.nhle.com/v1/player/${p.playerId}/game-log/20252026/2`)
+            fetch(`${PROXY}https://api-web.nhle.com/v1/player/${p.playerId}/game-log/20252026/2`)
               .then(r => r.ok ? r.json() : null)
               .catch(() => null)
           )
         );
-
-        // Compute L5 points for each player filtered to teamB's last 5 dates
-        function getTeamGames(log) {
-          return (log && log.gameLog ? log.gameLog : [])
-            .filter(g => teamBDates.has(normalizeDate(g.gameDate)));
-        }
-
-        function getL5Points(log) {
-          return getTeamGames(log).reduce((s,g) => s + (g.points||0), 0);
-        }
-
-        const l5FwdsRanked = l5Pool
-          .map((p, i) => ({ p, isDef: false, log: logResults[i] }))
-          .filter(r => r.p.positionCode !== 'D')
-          .sort((a, b) => getL5Points(b.log) - getL5Points(a.log))
-          .slice(0, 5);
-
-        const l5DefsRanked = l5Pool
-          .map((p, i) => ({ p, isDef: true, log: logResults[i] }))
-          .filter(r => r.p.positionCode === 'D')
-          .sort((a, b) => getL5Points(b.log) - getL5Points(a.log))
-          .slice(0, 3);
 
         function l5PlayerRow(p, isDef, log) {
           const lastName = p.lastName.default.toUpperCase();
@@ -7012,7 +6972,7 @@ function renderH2H() {
           const displayName = `${num} ${lastName}`.trim();
           const pos = isDef ? 'D' : p.positionCode;
 
-          const games = getTeamGames(log);
+          const games = (log && log.gameLog ? log.gameLog : []).slice(0, 5);
           const gp  = games.length;
           const g   = games.reduce((s,g) => s + (g.goals||0), 0);
           const a   = games.reduce((s,g) => s + (g.assists||0), 0);
@@ -7021,22 +6981,17 @@ function renderH2H() {
           const pm  = games.reduce((s,g) => s + (g.plusMinus||0), 0);
           const pmStr = pm >= 0 ? `+${pm}` : `${pm}`;
 
-          // avgTimeOnIcePerGame in game log may be seconds string like "18:32" or a number
           let toiStr = '—';
           if (gp > 0) {
-            const toiRaw = games[0].toi || games[0].timeOnIce || games[0].avgTimeOnIce;
-            if (typeof toiRaw === 'string' && toiRaw.includes(':')) {
-              // Already formatted — average the seconds
-              const totalSecs = games.reduce((s, gm) => {
-                const t = gm.toi || gm.timeOnIce || gm.avgTimeOnIce || '0:00';
+            const totalSecs = games.reduce((s, gm) => {
+              const t = gm.toi || gm.timeOnIce || gm.avgTimeOnIce || '0:00';
+              if (typeof t === 'string' && t.includes(':')) {
                 const parts = t.split(':');
                 return s + parseInt(parts[0]||0)*60 + parseInt(parts[1]||0);
-              }, 0);
-              toiStr = fmtTOI(totalSecs / gp);
-            } else if (typeof toiRaw === 'number') {
-              const totalSecs = games.reduce((s,gm) => s + (gm.toi||gm.timeOnIce||gm.avgTimeOnIce||0), 0);
-              toiStr = fmtTOI(totalSecs / gp);
-            }
+              }
+              return s + (typeof t === 'number' ? t : 0);
+            }, 0);
+            toiStr = fmtTOI(totalSecs / gp);
           }
 
           return `<div style="display:grid;grid-template-columns:${GRID};gap:0;align-items:center;padding:0.2rem 0.5rem;border-bottom:1px solid var(--border);font-size:0.73rem;">
@@ -7050,6 +7005,26 @@ function renderH2H() {
             <span style="text-align:center;color:var(--text2);font-size:0.68rem;">${toiStr}</span>
           </div>`;
         }
+
+        const l5FwdsRanked = l5Pool
+          .map((p, i) => ({ p, log: logResults[i] }))
+          .filter(r => r.p.positionCode !== 'D')
+          .sort((a, b) => {
+            const ag = (a.log&&a.log.gameLog?a.log.gameLog:[]).slice(0,5).reduce((s,g)=>s+(g.points||0),0);
+            const bg = (b.log&&b.log.gameLog?b.log.gameLog:[]).slice(0,5).reduce((s,g)=>s+(g.points||0),0);
+            return bg - ag;
+          })
+          .slice(0, 5);
+
+        const l5DefsRanked = l5Pool
+          .map((p, i) => ({ p, log: logResults[i] }))
+          .filter(r => r.p.positionCode === 'D')
+          .sort((a, b) => {
+            const ag = (a.log&&a.log.gameLog?a.log.gameLog:[]).slice(0,5).reduce((s,g)=>s+(g.points||0),0);
+            const bg = (b.log&&b.log.gameLog?b.log.gameLog:[]).slice(0,5).reduce((s,g)=>s+(g.points||0),0);
+            return bg - ag;
+          })
+          .slice(0, 3);
 
         if (l5LoadingEl) l5LoadingEl.remove();
         if (l5PanelEl) l5PanelEl.insertAdjacentHTML('beforeend',

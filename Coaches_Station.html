@@ -6791,7 +6791,7 @@ function renderH2H() {
       return `
         <div class="h2h-overview" style="margin-top:0.75rem;">
           <div class="h2h-overview-title">${title}</div>
-          <div class="h2h-overview-grid" style="grid-template-columns:210px 1fr 1fr 1fr;">
+          <div class="h2h-overview-grid" style="grid-template-columns:minmax(0,1fr) 70px 70px 70px;">
             <div class="h2h-ov-header">Stat</div>
             <div class="h2h-ov-header team-b">For</div>
             <div class="h2h-ov-header team-b">xGF%</div>
@@ -6806,7 +6806,7 @@ function renderH2H() {
         .vc-layout { display:grid; grid-template-columns: 28% 28% 1fr; gap:0.75rem; align-items:stretch; }
         .vc-stat-col { display:flex; flex-direction:column; gap:0; min-width:0; }
         .vc-player-col { display:flex; flex-direction:column; gap:0.5rem; min-width:0; }
-        .vc-player-col .h2h-overview { flex:1; }
+        .vc-player-col #vc-player-panel, .vc-player-col #vc-l5-player-panel { flex:1; }
         @media (max-width:1200px) {
           .vc-layout { grid-template-columns: 1fr 1fr; }
           .vc-player-col { grid-column: 1 / -1; flex-direction:row; gap:1rem; }
@@ -6851,7 +6851,7 @@ function renderH2H() {
             <div class="h2h-overview-title">${nameB.toUpperCase()} LAST 5 LEADERS</div>
             <div id="vc-l5-player-loading" style="padding:1rem 0.75rem;font-size:0.78rem;color:var(--text3);">Loading...</div>
           </div>
-          <div class="h2h-overview" id="vc-depth-panel">
+          <div class="h2h-overview" id="vc-depth-panel" style="flex:0 0 auto;">
             <div class="h2h-overview-title">SCORING DEPTH</div>
             <div id="vc-depth-loading" style="padding:1rem 0.75rem;font-size:0.78rem;color:var(--text3);">Loading...</div>
           </div>

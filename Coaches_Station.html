@@ -769,7 +769,7 @@
   }
   .h2h-overview-grid {
     display: grid;
-    grid-template-columns: 210px 1fr 1fr;
+    grid-template-columns: minmax(160px, 190px) 1fr 1fr;
     gap: 0;
   }
   .h2h-ov-header {
@@ -6802,8 +6802,22 @@ function renderH2H() {
     }
 
     content.innerHTML=`
-      <div style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;">
-        <div style="flex:0 0 340px;min-width:280px;display:flex;flex-direction:column;gap:0;">
+      <style>
+        .vc-layout { display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr); gap:1rem; align-items:flex-start; }
+        .vc-stat-col { display:flex; flex-direction:column; gap:0; min-width:0; }
+        .vc-player-col { display:flex; flex-direction:column; gap:0.75rem; min-width:0; }
+        @media (max-width:1200px) {
+          .vc-layout { grid-template-columns: 1fr 1fr; }
+          .vc-player-col { grid-column: 1 / -1; flex-direction:row; gap:1rem; }
+          .vc-player-col .h2h-overview { flex:1; min-width:0; }
+        }
+        @media (max-width:700px) {
+          .vc-layout { grid-template-columns: 1fr; }
+          .vc-player-col { flex-direction:column; grid-column:auto; }
+        }
+      </style>
+      <div class="vc-layout">
+        <div class="vc-stat-col">
           <div class="h2h-overview">
             <div class="h2h-overview-title">SEASON OVERVIEW</div>
             <div class="h2h-overview-grid">
@@ -6815,7 +6829,7 @@ function renderH2H() {
           </div>
           ${vcChancePanel(`SCORING CHANCES &amp; RUSHES &#8212; ${nameB.toUpperCase()} (SEASON)`, vcSeasonChanceRows())}
         </div>
-        <div style="flex:0 0 340px;min-width:280px;display:flex;flex-direction:column;gap:0;">
+        <div class="vc-stat-col">
           <div class="h2h-overview">
             <div class="h2h-overview-title">LAST 5 GAMES</div>
             <div class="h2h-overview-grid">
@@ -6827,7 +6841,7 @@ function renderH2H() {
           </div>
           ${vcChancePanel(`SCORING CHANCES &amp; RUSHES &#8212; ${nameB.toUpperCase()} (LAST 5)`, vcL5ChanceRows())}
         </div>
-        <div style="flex:1;min-width:360px;display:flex;flex-direction:column;gap:0.75rem;">
+        <div class="vc-player-col">
           <div class="h2h-overview" id="vc-player-panel" style="min-height:120px;">
             <div class="h2h-overview-title">${nameB.toUpperCase()} SEASON LEADERS</div>
             <div id="vc-player-loading" style="padding:1rem 0.75rem;font-size:0.78rem;color:var(--text3);">Loading...</div>

@@ -6924,7 +6924,7 @@ function renderH2H() {
         if (schedRes.ok) {
           const schedData = await schedRes.json();
           const played = (schedData.games || [])
-            .filter(g => g.gameType === 2 && g.gameState === 'OFF')
+            .filter(g => g.gameType === 2 && g.gameState === 'FINAL')
             .sort((a, b) => b.gameDate.localeCompare(a.gameDate))
             .slice(0, 5);
           teamBDates = new Set(played.map(g => normalizeDate(g.gameDate)));

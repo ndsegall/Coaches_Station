@@ -6994,7 +6994,7 @@ function renderH2H() {
           const g   = games.reduce((s,g) => s + (g.goals||0), 0);
           const a   = games.reduce((s,g) => s + (g.assists||0), 0);
           const pts = games.reduce((s,g) => s + (g.points||0), 0);
-          const pim = games.reduce((s,g) => s + (g.penaltyMinutes||0), 0);
+          const pim = games.reduce((s,g) => s + (g.pim||0), 0);
           const pm  = games.reduce((s,g) => s + (g.plusMinus||0), 0);
           const pmStr = pm >= 0 ? `+${pm}` : `${pm}`;
 

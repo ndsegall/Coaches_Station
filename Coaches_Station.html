@@ -6907,6 +6907,11 @@ function renderH2H() {
         const defs = skaters.filter(s => s.positionCode === 'D').slice(0, 3);
         const top8 = [...fwds, ...defs];
 
+        // Wider pool for L5 — top 12 fwds + top 6 defs by season points
+        const fwdsPool = skaters.filter(s => s.positionCode !== 'D').slice(0, 12);
+        const defsPool = skaters.filter(s => s.positionCode === 'D').slice(0, 6);
+        const l5Pool = [...fwdsPool, ...defsPool];
+
         const GRID = '1fr 28px 28px 28px 28px 32px 32px 44px';
 
         function buildHeaderRow() {
@@ -6953,14 +6958,32 @@ function renderH2H() {
           + buildSectionLabel('Defense')  + defs.map(p => seasonPlayerRow(p, true)).join('')
         );
 
-        // Fetch last 5 game logs for all 8 players in parallel
+        // Fetch last 5 game logs for wider pool in parallel
         const logResults = await Promise.all(
-          top8.map(p =>
+          l5Pool.map(p =>
             fetch(`https://corsproxy.io/?url=https://api-web.nhle.com/v1/player/${p.playerId}/game-log/20252026/2`)
               .then(r => r.ok ? r.json() : null)
               .catch(() => null)
           )
         );
+
+        // Compute L5 points for each player in the pool
+        function getL5Points(log) {
+          const games = (log && log.gameLog ? log.gameLog : []).slice(0, 5);
+          return games.reduce((s,g) => s + (g.points||0), 0);
+        }
+
+        const l5FwdsRanked = l5Pool
+          .map((p, i) => ({ p, isDef: false, log: logResults[i] }))
+          .filter(r => r.p.positionCode !== 'D')
+          .sort((a, b) => getL5Points(b.log) - getL5Points(a.log))
+          .slice(0, 5);
+
+        const l5DefsRanked = l5Pool
+          .map((p, i) => ({ p, isDef: true, log: logResults[i] }))
+          .filter(r => r.p.positionCode === 'D')
+          .sort((a, b) => getL5Points(b.log) - getL5Points(a.log))
+          .slice(0, 3);
 
         function l5PlayerRow(p, isDef, log) {
           const lastName = p.lastName.default.toUpperCase();
@@ -7007,24 +7030,11 @@ function renderH2H() {
           </div>`;
         }
 
-        // Sort L5 by points desc
-        const l5Rows = top8.map((p, i) => ({ p, isDef: i >= 5, log: logResults[i] }))
-          .sort((a, b) => {
-            const aGames = (a.log && a.log.gameLog ? a.log.gameLog : []).slice(0,5);
-            const bGames = (b.log && b.log.gameLog ? b.log.gameLog : []).slice(0,5);
-            const aPts = aGames.reduce((s,g) => s+(g.points||0), 0);
-            const bPts = bGames.reduce((s,g) => s+(g.points||0), 0);
-            return bPts - aPts;
-          });
-
-        const l5Fwds = l5Rows.filter(r => !r.isDef);
-        const l5Defs = l5Rows.filter(r => r.isDef);
-
         if (l5LoadingEl) l5LoadingEl.remove();
         if (l5PanelEl) l5PanelEl.insertAdjacentHTML('beforeend',
           buildHeaderRow()
-          + buildSectionLabel('Forwards') + l5Fwds.map(r => l5PlayerRow(r.p, false, r.log)).join('')
-          + buildSectionLabel('Defense')  + l5Defs.map(r => l5PlayerRow(r.p, true,  r.log)).join('')
+          + buildSectionLabel('Forwards') + l5FwdsRanked.map(r => l5PlayerRow(r.p, false, r.log)).join('')
+          + buildSectionLabel('Defense')  + l5DefsRanked.map(r => l5PlayerRow(r.p, true,  r.log)).join('')
         );
 
       } catch(e) {

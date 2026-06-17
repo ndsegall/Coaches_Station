@@ -6268,10 +6268,6 @@ function renderH2H() {
   }).filter(Boolean);
 
   const content=document.getElementById('h2h-content');
-  if(!matchups.length){
-    content.innerHTML=`<p style="color:var(--text2);padding:1rem;text-align:center;">No head-to-head games found in selected date range.</p>`;
-    return;
-  }
 
 
 
@@ -6601,11 +6597,14 @@ function renderH2H() {
       <div class="h2h-ov-cell" style="${borderStyle}">${row.b} ${rnk(row.bRank)}</div>`;
   }).join('');
 
-  // Compute max delta values for gradient shading
-  const h2hMaxEvDelta = Math.max(1, ...matchups.map(g => Math.abs(g.xgf - g.xga)));
-  const h2hMaxAsDelta = Math.max(1, ...matchups.map(g => Math.abs(g.axgf - g.axga)));
+  // Opponent's last 5 regular season games
+  const oppLast5 = allData.filter(r => r.team === teamB && r.date <= RS_END)
+    .slice(-5);
 
-  const h2hGameRowsHtml = matchups.map(g => {
+  const h2hMaxEvDelta = Math.max(1, ...oppLast5.map(g => Math.abs(g.xgf - g.xga)));
+  const h2hMaxAsDelta = Math.max(1, ...oppLast5.map(g => Math.abs(g.axgf - g.axga)));
+
+  const h2hGameRowsHtml = oppLast5.map(g => {
     const opp = g.team === g.homeTeam ? g.awayTeam : g.homeTeam;
     const isHome = g.team === g.homeTeam;
     const oppRow = getOpponentRow(g);
@@ -7260,7 +7259,7 @@ function renderH2H() {
       </div>
       <div style="margin-top:1rem;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
         <div class="sched-header-row" style="border-radius:0;position:static;">
-          <span>Date</span><span>Opponent</span><span style="text-align:center">Result</span><span style="text-align:center">Score</span>
+          <span>${nameB.toUpperCase()} — LAST 5 GAMES</span><span>Opponent</span><span style="text-align:center">Result</span><span style="text-align:center">Score</span>
           <span style="text-align:center">ES xG&#916;</span><span style="text-align:center">ES xGF</span><span style="text-align:center">ES xGA</span>
           <span style="text-align:center">AS xG&#916;</span><span style="text-align:center">AS xGF</span><span style="text-align:center">AS xGA</span>
         </div>
@@ -7277,11 +7276,11 @@ function renderH2H() {
         const gameDate = row.dataset.date;
         const homeT    = row.dataset.home;
         const awayT    = row.dataset.away;
-        const gameRow  = allData.find(r => r.team === teamA && r.date === gameDate && r.homeTeam === homeT && r.awayTeam === awayT);
+        const gameRow  = allData.find(r => r.team === teamB && r.date === gameDate && r.homeTeam === homeT && r.awayTeam === awayT);
         if (!gameRow) return;
         const oppRow   = getOpponentRow(gameRow);
         const isPo     = gameDate >= '2026-04-17';
-        row.insertAdjacentHTML('afterend', renderScheduleDetail(gameRow, oppRow, teamA, isPo));
+        row.insertAdjacentHTML('afterend', renderScheduleDetail(gameRow, oppRow, teamB, isPo));
       });
     });
 

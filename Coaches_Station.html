@@ -2180,11 +2180,11 @@ function processData(rows) {
     ppToi: parseTOI(r['PP TOI'] || '0:00'),
     ppXgf: parseFloat(r['PP xGF'] || 0),
     ppGf:  parseFloat(r['PP GF']  || 0),
-    ppOpp: parseFloat(r['Penalties Drawn'] || r['penalties drawn'] || 0),
+    ppOpp: parseFloat(r['PP Opportunities'] || r['Penalties Drawn'] || r['penalties drawn'] || 0),
     pkToi: parseTOI(r['PK TOI'] || '0:00'),
     pkXga: parseFloat(r['PK xGA'] || 0),
     pkGa:  parseFloat(r['PK GA']  || 0),
-    pkOpp: parseFloat(r['Penalties Taken'] || r['penalties taken'] || 0),
+    pkOpp: parseFloat(r['SH Opportunities'] || r['Penalties Taken'] || r['penalties taken'] || 0),
     // Goaltending
     sa:    parseFloat(r['SA'] || r['Shots Against'] || r['shots_against'] || 0),
     sv:    parseFloat(r['SV'] || r['Saves'] || r['saves'] || 0),
@@ -2222,6 +2222,13 @@ function processData(rows) {
     // Odd man rushes (ES)
     esOmr:   parseFloat(r['ES Odd Man Rushes'] || 0),
     esOmrA:  parseFloat(r['ES Odd Man Rushes Against'] || 0),
+    esLpr:        parseFloat(r['ES Successful LPRs'] || 0),
+    esLprA:       parseFloat(r['ES Successful LPRs Against'] || 0),
+    esOzPoss:     parseFloat(r['ES OZ Possession Time'] || 0),
+    esOzPossA:    parseFloat(r['ES OZ Possession Time Against'] || 0),
+    esScreened:   parseFloat(r['ES Screened Shots on Net'] || 0),
+    esDumpIn:     parseFloat(r['ES Dump In Attempts'] || 0),
+    esDumpInRec:  parseFloat(r['ES OZ Dump In Recoveries'] || 0),
     // All-strengths shot attempts + true shooting
     asShotAtt:  parseFloat(r['AS Shot Attempts'] || 0),
     asShotsOnNet: parseFloat(r['AS Shots on Net'] || 0),
@@ -5771,7 +5778,7 @@ function renderSortView({ teamData, rankOf, lowerBetterKeys, labels, fmtVal, sel
   const isTeamSort = srkSortKey === 'team';
   const thStyle = k => {
     const isActive = k === srkSortKey;
-    return `display:flex;justify-content:center;width:170px;padding:0.3rem 0;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;border-bottom:${isActive?'2px solid #0066cc':'1px solid var(--border)'};color:${isActive?'#0066cc':'var(--text3)'};white-space:nowrap;cursor:pointer;flex-shrink:0;box-sizing:border-box;`;
+    return `display:flex;justify-content:center;width:200px;padding:0.3rem 0;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;border-bottom:${isActive?'2px solid #0066cc':'1px solid var(--border)'};color:${isActive?'#0066cc':'var(--text3)'};white-space:nowrap;cursor:pointer;flex-shrink:0;box-sizing:border-box;`;
   };
   const teamHeaderActive = srkSortKey === 'team';
   const thLabel = k => labels[k] + (k === srkSortKey ? (srkSortDir === 'best' ? ' ↓' : ' ↑') : '');
@@ -5803,7 +5810,7 @@ function renderSortView({ teamData, rankOf, lowerBetterKeys, labels, fmtVal, sel
       ${colKeys.map(k => {
         const rk = rankOf[row.team][k];
         const rc = rk<=8?'#067a3f':rk>=25?'#c0392b':'var(--text3)';
-        return `<span style="display:flex;justify-content:center;width:170px;box-sizing:border-box;font-family:'DM Mono',monospace;font-size:0.88rem;font-weight:${k===srkSortKey?'700':'400'};color:${k===srkSortKey?'var(--text)':'var(--text2)'};white-space:nowrap;flex-shrink:0;">${fmtVal(k,row[k])}&nbsp;<span style="font-size:0.68rem;color:${rc};">(${rk})</span></span>`;
+        return `<span style="display:flex;justify-content:center;width:200px;box-sizing:border-box;font-family:'DM Mono',monospace;font-size:0.88rem;font-weight:${k===srkSortKey?'700':'400'};color:${k===srkSortKey?'var(--text)':'var(--text2)'};white-space:nowrap;flex-shrink:0;">${fmtVal(k,row[k])}&nbsp;<span style="font-size:0.68rem;color:${rc};">(${rk})</span></span>`;
       }).join('')}
     </div>`;
   });

@@ -7737,15 +7737,6 @@ function renderH2H() {
             </div>`;
           })()}
         </div>
-      </div>
-      <div style="margin-top:1rem;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
-        <div class="sched-header-row" style="border-radius:0;position:static;">
-          <span>LAST 5 GAMES</span><span>Opponent</span><span style="text-align:center">Result</span><span style="text-align:center">Score</span>
-          <span style="text-align:center">ES xG&#916;</span><span style="text-align:center">ES xGF</span><span style="text-align:center">ES xGA</span>
-          <span style="text-align:center">AS xG&#916;</span><span style="text-align:center">AS xGF</span><span style="text-align:center">AS xGA</span>
-        </div>
-        <div id="h2h-game-log">${h2hGameRowsHtml}</div>
-      
         <div class="vc-player-col">
           <div class="h2h-overview" id="vc-player-panel" style="min-height:120px;">
             <div class="h2h-overview-title">${nameB.toUpperCase()} SEASON LEADERS</div>
@@ -7760,6 +7751,14 @@ function renderH2H() {
             <div id="vc-depth-loading" style="padding:1rem 0.75rem;font-size:0.78rem;color:var(--text3);">Loading...</div>
           </div>
         </div>
+      </div>
+      <div style="margin-top:1rem;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+        <div class="sched-header-row" style="border-radius:0;position:static;">
+          <span>LAST 5 GAMES</span><span>Opponent</span><span style="text-align:center">Result</span><span style="text-align:center">Score</span>
+          <span style="text-align:center">ES xG&#916;</span><span style="text-align:center">ES xGF</span><span style="text-align:center">ES xGA</span>
+          <span style="text-align:center">AS xG&#916;</span><span style="text-align:center">AS xGF</span><span style="text-align:center">AS xGA</span>
+        </div>
+        <div id="h2h-game-log">${h2hGameRowsHtml}</div>
       </div>`;
     content.querySelectorAll('#h2h-game-log .sched-game-row').forEach(row => {
       row.addEventListener('click', () => {

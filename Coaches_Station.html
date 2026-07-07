@@ -1922,6 +1922,7 @@
           <option value="head-coach">Babcock</option>
           <option value="video-coach">Segall</option>
           <option value="elenz">Elenz</option>
+          <option value="allen">Allen</option>
         </select>
       </div>
       <div class="trend-modal-controls" style="display:grid;grid-template-columns:auto auto auto;align-items:center;gap:0.3rem 0.5rem;">
@@ -4530,7 +4531,6 @@ function renderTrendStats(team, gameDates, cmpTeam, cmpPoints) {
       ${statCard('ES Dump-in Rec%', esDumpInPctW.toFixed(1)+'%', rDumpInPct, cmp(esDumpInPctW,sDumpInPct,true, C?C.esDumpInPct:null, CS?CS.esDumpInPct:null, true), C?C.esDumpInPct.toFixed(1)+'% '+r(crDumpInPct):'')}
     </div>
 
-
     <div class="trend-stat-section-label">Special Teams</div>
     <div class="trend-stat-grid">
       ${statCard('PP xGF/2', ppXgfP2.toFixed(2), rPpXgfP2, cmp(ppXgfP2,sPpP2,true, C?C.ppXgfP2:null, CS?CS.ppP2:null), C?C.ppXgfP2.toFixed(2)+' '+r(crPpXgfP2):'')}
@@ -6330,6 +6330,16 @@ function renderH2H() {
   const teamB=document.getElementById('h2h-team-b').value;
   const role=(document.getElementById('h2h-role-select')||{}).value||'head-coach';
 
+  if(role==='allen'){
+    const content=document.getElementById('h2h-content');
+    content.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:center;padding:2rem;">
+        <img src="data:image/jpeg;base64,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" style="max-width:100%;max-height:80vh;border-radius:8px;" alt="Allen">
+      </div>
+    `;
+    return;
+  }
+
   // Always use all RS data regardless of main page date range
   const aRows=allData.filter(r=>r.team===teamA&&r.date>=minDate&&r.date<=RS_END);
   const matchups=aRows.filter(r=>{
@@ -6715,6 +6725,42 @@ function renderH2H() {
       <div class="h2h-ov-cell" style="${borderStyle}">${row.b} ${rnk(row.bRank)}</div>`;
   }).join('');
 
+  // Opponent's last 5 regular season games
+  const oppLast5 = allData.filter(r => r.team === teamB && r.date <= RS_END)
+    .slice(-5);
+
+  const h2hMaxEvDelta = Math.max(1, ...oppLast5.map(g => Math.abs(g.xgf - g.xga)));
+  const h2hMaxAsDelta = Math.max(1, ...oppLast5.map(g => Math.abs(g.axgf - g.axga)));
+
+  const h2hGameRowsHtml = oppLast5.map(g => {
+    const opp = g.team === g.homeTeam ? g.awayTeam : g.homeTeam;
+    const isHome = g.team === g.homeTeam;
+    const oppRow = getOpponentRow(g);
+    const { result, isSow, isSol, isOtw, dispGf, dispGa } = getGameResult(g, oppRow);
+    const resultCls = (isSow || isOtw || g.w === 1) ? 'sched-result-w' : (isSol || g.otl === 1) ? 'sched-result-o' : 'sched-result-l';
+    const evDelta = g.xgf - g.xga;
+    const asDelta = g.axgf - g.axga;
+    const evDeltaStyle = deltaCellStyle(evDelta, h2hMaxEvDelta);
+    const asDeltaStyle = deltaCellStyle(asDelta, h2hMaxAsDelta);
+    const evDeltaStr = (evDelta >= 0 ? '+' : '') + evDelta.toFixed(2);
+    const asDeltaStr = (asDelta >= 0 ? '+' : '') + asDelta.toFixed(2);
+    const isPo = g.date >= '2026-04-17';
+    const key = `${g.date}_${g.homeTeam}_${g.awayTeam}`;
+    const rowCls = isPo ? 'sched-game-row po-row' : 'sched-game-row';
+    return `<div class="${rowCls}" data-gamekey="${key}" data-date="${g.date}" data-home="${g.homeTeam}" data-away="${g.awayTeam}">
+      <span class="sched-date-col">${g.date}</span>
+      <span class="sched-opp-col"><span class="sched-ha-badge">${isHome ? 'vs' : '@'}</span>${TEAM_NAMES[opp] || opp}</span>
+      <span class="${resultCls}">${result}</span>
+      <span class="sched-score-col">${dispGf}&#8211;${dispGa}</span>
+      <span class="sched-xg-col" style="${evDeltaStyle}padding:0 4px;border-radius:3px;text-align:center;">${evDeltaStr}</span>
+      <span class="sched-xg-col">${g.xgf.toFixed(2)}</span>
+      <span class="sched-xg-col">${g.xga.toFixed(2)}</span>
+      <span class="sched-xg-col" style="${asDeltaStyle}padding:0 4px;border-radius:3px;text-align:center;">${asDeltaStr}</span>
+      <span class="sched-xg-col">${g.axgf.toFixed(2)}</span>
+      <span class="sched-xg-col">${g.axga.toFixed(2)} <span class="sched-chevron">&#9662;</span></span>
+    </div>`;
+  }).join('');
+
   // Build teamA vs teamB matchup game rows
   const vsMaxEvDelta = matchups.length ? Math.max(1, ...matchups.map(g => Math.abs(g.xgf - g.xga))) : 1;
   const vsMaxAsDelta = matchups.length ? Math.max(1, ...matchups.map(g => Math.abs(g.axgf - g.axga))) : 1;
@@ -7051,7 +7097,232 @@ function renderH2H() {
     const clrGF='#2e7d32', clrGA='#c0392b';
 
     // ── Render ──
-    content.innerHTML=`
+    
+    // Season-level chance/OMR stats for all teams (for ranks)
+    const hcSeasonMap = {};
+    for(const t of teams){
+      const rows = filtered.filter(r=>r.team===t);
+      if(!rows.length) continue;
+      const gp = rows.length;
+      const esRushXgf  = rows.reduce((s,r)=>s+r.esRushXgf,0);
+      const esRushXga  = rows.reduce((s,r)=>s+r.esRushXga,0);
+      const esCycleXgf = rows.reduce((s,r)=>s+r.esCycleXgf,0);
+      const esCycleXga = rows.reduce((s,r)=>s+r.esCycleXga,0);
+      const esFcXgf    = rows.reduce((s,r)=>s+r.esFcXgf,0);
+      const esFcXga    = rows.reduce((s,r)=>s+r.esFcXga,0);
+      hcSeasonMap[t] = {
+        esGradeA:  rows.reduce((s,r)=>s+r.esGradeA,0)/gp,
+        esGradeAA: rows.reduce((s,r)=>s+r.esGradeAA,0)/gp,
+        esGradeB:  rows.reduce((s,r)=>s+r.esGradeB,0)/gp,
+        esGradeBA: rows.reduce((s,r)=>s+r.esGradeBA,0)/gp,
+        esGradeC:  rows.reduce((s,r)=>s+r.esGradeC,0)/gp,
+        esGradeCA: rows.reduce((s,r)=>s+r.esGradeCA,0)/gp,
+        esOmr:     rows.reduce((s,r)=>s+r.esOmr,0)/gp,
+        esOmrA:    rows.reduce((s,r)=>s+r.esOmrA,0)/gp,
+        esLpr:     rows.reduce((s,r)=>s+r.esLpr,0)/gp,
+        esLprA:    rows.reduce((s,r)=>s+r.esLprA,0)/gp,
+        esLprPct:  (()=>{ const f=rows.reduce((s,r)=>s+r.esLpr,0), a=rows.reduce((s,r)=>s+r.esLprA,0); return f+a>0?f/(f+a)*100:50; })(),
+        esOzPoss:  rows.reduce((s,r)=>s+r.esOzPoss,0)/gp,
+        esOzPossA: rows.reduce((s,r)=>s+r.esOzPossA,0)/gp,
+        esScreened:  rows.reduce((s,r)=>s+r.esScreened,0)/gp,
+        esScreenedA: rows.reduce((s,r)=>{
+          const gid=r.date+'_'+r.homeTeam+'_'+r.awayTeam;
+          const pair=window._gamePairs[gid]||{};
+          const oppTeam=Object.keys(pair).find(t=>t!==r.team);
+          const oppRow=oppTeam?pair[oppTeam]:null;
+          return s+(oppRow?oppRow.esScreened:0);
+        },0)/gp,
+        esDumpIn:    rows.reduce((s,r)=>s+r.esDumpIn,0)/gp,
+        esDumpInRec: rows.reduce((s,r)=>s+r.esDumpInRec,0)/gp,
+        esDumpInPct: (()=>{ const di=rows.reduce((s,r)=>s+r.esDumpIn,0), rec=rows.reduce((s,r)=>s+r.esDumpInRec,0); return di>0?rec/di*100:0; })(),
+        esDumpInA:    rows.reduce((s,r)=>{
+          const gid=r.date+'_'+r.homeTeam+'_'+r.awayTeam;
+          const pair=window._gamePairs[gid]||{};
+          const oppTeam=Object.keys(pair).find(t=>t!==r.team);
+          const oppRow=oppTeam?pair[oppTeam]:null;
+          return s+(oppRow?oppRow.esDumpIn:0);
+        },0)/gp,
+        esDumpInRecA: rows.reduce((s,r)=>{
+          const gid=r.date+'_'+r.homeTeam+'_'+r.awayTeam;
+          const pair=window._gamePairs[gid]||{};
+          const oppTeam=Object.keys(pair).find(t=>t!==r.team);
+          const oppRow=oppTeam?pair[oppTeam]:null;
+          return s+(oppRow?oppRow.esDumpInRec:0);
+        },0)/gp,
+        esDumpInPctA: (()=>{
+          const diA=rows.reduce((s,r)=>{
+            const gid=r.date+'_'+r.homeTeam+'_'+r.awayTeam;
+            const pair=window._gamePairs[gid]||{};
+            const oppTeam=Object.keys(pair).find(t=>t!==r.team);
+            const oppRow=oppTeam?pair[oppTeam]:null;
+            return s+(oppRow?oppRow.esDumpIn:0);
+          },0);
+          const recA=rows.reduce((s,r)=>{
+            const gid=r.date+'_'+r.homeTeam+'_'+r.awayTeam;
+            const pair=window._gamePairs[gid]||{};
+            const oppTeam=Object.keys(pair).find(t=>t!==r.team);
+            const oppRow=oppTeam?pair[oppTeam]:null;
+            return s+(oppRow?oppRow.esDumpInRec:0);
+          },0);
+          return diA>0?recA/diA*100:0;
+        })(),
+        esRushXgf:  esRushXgf/gp,  esRushXga:  esRushXga/gp,
+        esCycleXgf: esCycleXgf/gp, esCycleXga: esCycleXga/gp,
+        esFcXgf:    esFcXgf/gp,    esFcXga:    esFcXga/gp,
+        esRushXgfPct:  esRushXgf+esRushXga>0  ? esRushXgf/(esRushXgf+esRushXga)*100   : 50,
+        esCycleXgfPct: esCycleXgf+esCycleXga>0? esCycleXgf/(esCycleXgf+esCycleXga)*100: 50,
+        esFcXgfPct:    esFcXgf+esFcXga>0      ? esFcXgf/(esFcXgf+esFcXga)*100         : 50,
+        asShotAtt: rows.reduce((s,r)=>s+r.asShotAtt,0)/gp,
+        asShotAttA: rows.reduce((s,r)=>{
+          const gid = r.date+'_'+r.homeTeam+'_'+r.awayTeam;
+          const pair = window._gamePairs[gid]||{};
+          const oppTeam = Object.keys(pair).find(t=>t!==r.team);
+          const oppRow = oppTeam ? pair[oppTeam] : null;
+          return s + (oppRow ? oppRow.asShotAtt : 0);
+        },0)/gp,
+      };
+    }
+    function hcSeasonRank(key, higherBetter=true) {
+      const entries = Object.entries(hcSeasonMap)
+        .filter(([,v])=>v[key]!=null)
+        .sort((a,b)=>higherBetter ? b[1][key]-a[1][key] : a[1][key]-b[1][key]);
+      const m = {};
+      entries.forEach(([team],i)=>{
+        const val = hcSeasonMap[team][key];
+        const tied = entries.filter(([t])=>Math.abs(hcSeasonMap[t][key]-val)<0.0001).length;
+        const r = entries.findIndex(([t])=>Math.abs(hcSeasonMap[t][key]-val)<0.0001)+1;
+        m[team] = tied>1?`T-${r}`:`${r}`;
+      });
+      return m;
+    }
+    const hcSRankGA      = hcSeasonRank('esGradeA',      true);
+    const hcSRankGAA     = hcSeasonRank('esGradeAA',     false);
+    const hcSRankGB      = hcSeasonRank('esGradeB',      true);
+    const hcSRankGBA     = hcSeasonRank('esGradeBA',     false);
+    const hcSRankGC      = hcSeasonRank('esGradeC',      true);
+    const hcSRankGCA     = hcSeasonRank('esGradeCA',     false);
+    const hcSRankOMR     = hcSeasonRank('esOmr',         true);
+    const hcSRankOMRA    = hcSeasonRank('esOmrA',        false);
+    const hcSRankRushF   = hcSeasonRank('esRushXgf',     true);
+    const hcSRankRushA   = hcSeasonRank('esRushXga',     false);
+    const hcSRankCycleF  = hcSeasonRank('esCycleXgf',    true);
+    const hcSRankCycleA  = hcSeasonRank('esCycleXga',    false);
+    const hcSRankFcF     = hcSeasonRank('esFcXgf',       true);
+    const hcSRankFcA     = hcSeasonRank('esFcXga',       false);
+    const hcSRankRushPct = hcSeasonRank('esRushXgfPct',  true);
+    const hcSRankCyclPct = hcSeasonRank('esCycleXgfPct', true);
+    const hcSRankFcPct   = hcSeasonRank('esFcXgfPct',    true);
+    const hcSRankShotAtt  = hcSeasonRank('asShotAtt',      true);
+    const hcSRankShotAttA = hcSeasonRank('asShotAttA',     false);
+    const hcSRankLprPct   = hcSeasonRank('esLprPct',       true);
+    const hcSRankOzPoss   = hcSeasonRank('esOzPoss',       true);
+    const hcSRankOzPossA  = hcSeasonRank('esOzPossA',      false);
+    const hcSRankScreened = hcSeasonRank('esScreened',     true);
+    const hcSRankScreenedA= hcSeasonRank('esScreenedA',    false);
+    const hcSRankDumpInPct= hcSeasonRank('esDumpInPct',    true);
+    const hcSRankDumpInPctA=hcSeasonRank('esDumpInPctA',   false);
+
+    function hcRnk(rankMap, team) {
+      const v = rankMap[team];
+      return v ? `<span class="h2h-ov-rank">(#${v})</span>` : '';
+    }
+    function pctBg(pct) {
+      if (pct === null) return '';
+      const delta = pct - 50;
+      const intensity = Math.min(Math.abs(delta) / 10, 1);
+      if (delta >= 0) {
+        const g = Math.round(122 + intensity * 40);
+        const a = (0.12 + intensity * 0.25).toFixed(2);
+        return 'background:rgba(6,' + g + ',63,' + a + ');';
+      } else {
+        const r = Math.round(180 + intensity * 32);
+        const a = (0.12 + intensity * 0.25).toFixed(2);
+        return 'background:rgba(' + r + ',57,43,' + a + ');';
+      }
+    }
+    // Mini row for compact stacked display (same 4-col grid, smaller font)
+    function hcMiniRow(label, forVal, forRank, agaVal, agaRank, isLast=false) {
+      const border = isLast ? 'border-bottom:none;' : '';
+      const style = 'font-size:0.75rem;padding:0.18rem 0.5rem;color:var(--text2);';
+      return '<div class="h2h-ov-label" style="' + border + style + '">' + label + '</div>'
+           + '<div class="h2h-ov-cell" style="' + border + style + '">' + forVal + ' ' + forRank + '</div>'
+           + '<div class="h2h-ov-cell" style="' + border + style + '"></div>'
+           + '<div class="h2h-ov-cell" style="' + border + style + '">' + agaVal + ' ' + agaRank + '</div>';
+    }
+    // Subheader spanning all 4 columns
+    function hcSubheader(label) {
+      return '<div style="grid-column:1/5;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);padding:0.35rem 0.5rem 0.1rem;border-top:1px solid var(--border);">' + label + '</div>';
+    }
+    // Standard row (label / for / against)
+    function hcRow(label, forVal, forRank, agaVal, agaRank, isLast=false) {
+      const border = isLast ? 'border-bottom:none;' : '';
+      return '<div class="h2h-ov-label" style="' + border + '">' + label + '</div>'
+           + '<div class="h2h-ov-cell" style="' + border + '">' + forVal + ' ' + forRank + '</div>'
+           + '<div class="h2h-ov-cell" style="' + border + '"></div>'
+           + '<div class="h2h-ov-cell" style="' + border + '">' + agaVal + ' ' + agaRank + '</div>';
+    }
+    // Chance row: label / for value | xGF% centred with shading | against value
+    // Uses a 5-column sub-layout inside a span-3 cell
+    function hcChanceRow(label, forVal, forRank, pct, pctRankMap, agaVal, agaRank, isLast=false) {
+      const border = isLast ? 'border-bottom:none;' : '';
+      const bg = pctBg(pct);
+      const pctDisplay = pct !== null ? pct.toFixed(1) + '%' : '—';
+      const pctRnk = pct !== null ? hcRnk(pctRankMap, teamB) : '';
+      return '<div class="h2h-ov-label" style="' + border + '">' + label + '</div>'
+           + '<div class="h2h-ov-cell" style="' + border + 'text-align:right;">' + forVal + ' ' + forRank + '</div>'
+           + '<div class="h2h-ov-cell" style="' + border + bg + 'text-align:center;font-weight:600;">' + pctDisplay + ' ' + pctRnk + '</div>'
+           + '<div class="h2h-ov-cell" style="' + border + 'text-align:left;">' + agaVal + ' ' + agaRank + '</div>';
+    }
+    const hcSv = hcSeasonMap[teamB];
+    const hcL5v = l5B;
+
+    // Helper to format per-game from season totals (already per-game in hcSeasonMap)
+    // l5 totals are raw 5-game sums, divide by gp (actual games played, may be <5 early season)
+    const hcL5gp = l5v ? (l5v.gp || 5) : 5;
+
+    function hcSeasonChanceRows() {
+      const rows = [
+        hcChanceRow('ES Rush xGF/GP',      sv?sv.esRushXgf.toFixed(3):'—',  hcRnk(hcSRankRushF,teamB),  sv?sv.esRushXgfPct:null,  hcSRankRushPct,  sv?sv.esRushXga.toFixed(3):'—',  hcRnk(hcSRankRushA,teamB)),
+        hcChanceRow('ES Cycle xGF/GP',     sv?sv.esCycleXgf.toFixed(3):'—', hcRnk(hcSRankCycleF,teamB), sv?sv.esCycleXgfPct:null, hcSRankCyclPct,  sv?sv.esCycleXga.toFixed(3):'—', hcRnk(hcSRankCycleA,teamB)),
+        hcChanceRow('ES Forecheck xGF/GP', sv?sv.esFcXgf.toFixed(3):'—',    hcRnk(hcSRankFcF,teamB),    sv?sv.esFcXgfPct:null,    hcSRankFcPct,    sv?sv.esFcXga.toFixed(3):'—',    hcRnk(hcSRankFcA,teamB)),
+        hcSubheader('Chance Grades'),
+        hcMiniRow('ES A Chances/GP', sv?sv.esGradeA.toFixed(2):'—',  hcRnk(hcSRankGA,teamB),  sv?sv.esGradeAA.toFixed(2):'—', hcRnk(hcSRankGAA,teamB)),
+        hcMiniRow('ES B Chances/GP', sv?sv.esGradeB.toFixed(2):'—',  hcRnk(hcSRankGB,teamB),  sv?sv.esGradeBA.toFixed(2):'—', hcRnk(hcSRankGBA,teamB)),
+        hcMiniRow('ES C Chances/GP', sv?sv.esGradeC.toFixed(2):'—',  hcRnk(hcSRankGC,teamB),  sv?sv.esGradeCA.toFixed(2):'—', hcRnk(hcSRankGCA,teamB), true),
+      ];
+      return rows.join('');
+    }
+
+    function hcL5ChanceRows() {
+      const rows = [
+        hcChanceRow('ES Rush xGF/GP',      l5v?(l5v.esRushXgf/l5gp).toFixed(3):'—',  hcRnk(l5RankRushF,teamB),  l5v?l5v.esRushXgfPct:null,  l5RankRushPct,  l5v?(l5v.esRushXga/l5gp).toFixed(3):'—',  hcRnk(l5RankRushA,teamB)),
+        hcChanceRow('ES Cycle xGF/GP',     l5v?(l5v.esCycleXgf/l5gp).toFixed(3):'—', hcRnk(l5RankCycleF,teamB), l5v?l5v.esCycleXgfPct:null, l5RankCyclPct,  l5v?(l5v.esCycleXga/l5gp).toFixed(3):'—', hcRnk(l5RankCycleA,teamB)),
+        hcChanceRow('ES Forecheck xGF/GP', l5v?(l5v.esFcXgf/l5gp).toFixed(3):'—',    hcRnk(l5RankFcF,teamB),    l5v?l5v.esFcXgfPct:null,    l5RankFcPct,    l5v?(l5v.esFcXga/l5gp).toFixed(3):'—',    hcRnk(l5RankFcA,teamB)),
+        hcSubheader('Chance Grades'),
+        hcMiniRow('ES A Chances/GP', l5v?(l5v.esGradeA/l5gp).toFixed(2):'—', hcRnk(l5RankGradeA,teamB),  l5v?(l5v.esGradeAA/l5gp).toFixed(2):'—', hcRnk(l5RankGradeAA,teamB)),
+        hcMiniRow('ES B Chances/GP', l5v?(l5v.esGradeB/l5gp).toFixed(2):'—', hcRnk(l5RankGradeB,teamB),  l5v?(l5v.esGradeBA/l5gp).toFixed(2):'—', hcRnk(l5RankGradeBA,teamB)),
+        hcMiniRow('ES C Chances/GP', l5v?(l5v.esGradeC/l5gp).toFixed(2):'—', hcRnk(l5RankGradeC,teamB),  l5v?(l5v.esGradeCA/l5gp).toFixed(2):'—', hcRnk(l5RankGradeCA,teamB), true),
+      ];
+      return rows.join('');
+    }
+
+    function hcChancePanel(title, rowsHtml) {
+      return `
+        <div class="h2h-overview" style="margin-top:0.75rem;">
+          <div class="h2h-overview-title">${title}</div>
+          <div class="h2h-overview-grid" style="grid-template-columns:minmax(0,1fr) 110px 110px 110px;">
+            <div class="h2h-ov-header">Stat</div>
+            <div class="h2h-ov-header team-b">For</div>
+            <div class="h2h-ov-header team-b">xGF%</div>
+            <div class="h2h-ov-header team-b">Against</div>
+            ${rowsHtml}
+          </div>
+        </div>`;
+    }
+
+    
+
+  content.innerHTML=`
       <div style="display:flex;flex-direction:column;gap:1rem;padding:0.25rem 0;">
 
         <!-- Goals For / Against Breakdown -->
@@ -7136,9 +7407,41 @@ function renderH2H() {
 
         </div>
 
+
+        <!-- Scoring Chances & Team Stats second row -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div>
+            ${hcChancePanel(`SCORING CHANCES &amp; RUSHES &#8212; ${nameB.toUpperCase()} (SEASON)`, hcSeasonChanceRows())}
+          </div>
+          <div>
+            ${(()=>{
+              const fmtOz = s => { const m=Math.floor(s/60), sec=String(Math.round(s%60)).padStart(2,'0'); return `${m}:${sec}`; };
+              const rows = [
+                hcRow('ES LPR%',            hcSv?(hcSv.esLprPct).toFixed(1)+'%':'\u2014',    hcRnk(hcSRankLprPct,teamB),    hcSv?(100-hcSv.esLprPct).toFixed(1)+'%':'\u2014', hcRnk(hcSRankLprPct,teamB)),
+                hcRow('ES OMR/GP',          hcSv?hcSv.esOmr.toFixed(2):'\u2014',              hcRnk(hcSRankOMR,teamB),       hcSv?hcSv.esOmrA.toFixed(2):'\u2014', hcRnk(hcSRankOMRA,teamB)),
+                hcRow('ES OZ Poss/GP',      hcSv?fmtOz(hcSv.esOzPoss):'\u2014',              hcRnk(hcSRankOzPoss,teamB),    hcSv?fmtOz(hcSv.esOzPossA):'\u2014', hcRnk(hcSRankOzPossA,teamB)),
+                hcRow('AS Shot Attempts/GP',hcSv?hcSv.asShotAtt.toFixed(1):'\u2014',         hcRnk(hcSRankShotAtt,teamB),   hcSv?hcSv.asShotAttA.toFixed(1):'\u2014', hcRnk(hcSRankShotAttA,teamB)),
+                hcRow('ES Screened SOG/GP', hcSv?hcSv.esScreened.toFixed(1):'\u2014',        hcRnk(hcSRankScreened,teamB),  hcSv?hcSv.esScreenedA.toFixed(1):'\u2014', hcRnk(hcSRankScreenedA,teamB)),
+                hcRow('ES Dump-in Rec%',    hcSv?(hcSv.esDumpInPct).toFixed(1)+'%':'\u2014', hcRnk(hcSRankDumpInPct,teamB), hcSv?(hcSv.esDumpInPctA).toFixed(1)+'%':'\u2014', hcRnk(hcSRankDumpInPctA,teamB), true),
+              ].join('');
+              return `<div class="h2h-overview" style="margin-top:0;">
+                <div class="h2h-overview-title">TEAM STATS &#8212; ${nameB.toUpperCase()} (SEASON)</div>
+                <div class="h2h-overview-grid" style="grid-template-columns:minmax(0,1fr) 110px 110px 110px;">
+                  <div class="h2h-ov-header">Stat</div>
+                  <div class="h2h-ov-header team-b">For</div>
+                  <div class="h2h-ov-header"></div>
+                  <div class="h2h-ov-header team-b">Against</div>
+                  ${rows}
+                </div>
+              </div>`;
+            })()}
+          </div>
+        </div>
+
       </div>`;
     return;
   }
+
   if(role==='video-coach'){
     // Season-level chance/OMR stats for all teams (for ranks)
     const vcSeasonMap = {};
@@ -7536,7 +7839,7 @@ function renderH2H() {
     <!-- Games vs opponent — schedule-style -->
     <div style="margin-top:1rem;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
       <div class="sched-header-row" style="border-radius:0;position:static;">
-        <span>${nameA.toUpperCase()} VS ${nameB.toUpperCase()}</span><span>Opponent</span><span style="text-align:center">Result</span><span style="text-align:center">Score</span>
+        <span>Date</span><span>Opponent</span><span style="text-align:center">Result</span><span style="text-align:center">Score</span>
         <span style="text-align:center">ES xG&#916;</span><span style="text-align:center">ES xGF</span><span style="text-align:center">ES xGA</span>
         <span style="text-align:center">AS xG&#916;</span><span style="text-align:center">AS xGF</span><span style="text-align:center">AS xGA</span>
       </div>
@@ -7595,6 +7898,7 @@ function renderH2H() {
       row.insertAdjacentHTML('afterend', detailHtml);
     });
   });
+
 }
 
 document.getElementById('h2h-btn').addEventListener('click', () => {
@@ -7609,6 +7913,8 @@ document.getElementById('h2h-overlay').addEventListener('click', e => {
   if(e.target===document.getElementById('h2h-overlay'))
     document.getElementById('h2h-overlay').classList.remove('visible');
 });
+
+
 document.getElementById('h2h-swap-btn').addEventListener('click', () => {
   const selA = document.getElementById('h2h-team-a');
   const selB = document.getElementById('h2h-team-b');
@@ -9274,1138 +9580,6 @@ document.addEventListener('keydown', e => {
   });
 });
 
-  // Opponent's last 5 regular season games
-  const oppLast5 = allData.filter(r => r.team === teamB && r.date <= RS_END)
-    .slice(-5);
-
-  const h2hMaxEvDelta = Math.max(1, ...oppLast5.map(g => Math.abs(g.xgf - g.xga)));
-  const h2hMaxAsDelta = Math.max(1, ...oppLast5.map(g => Math.abs(g.axgf - g.axga)));
-
-  const h2hGameRowsHtml = oppLast5.map(g => {
-    const opp = g.team === g.homeTeam ? g.awayTeam : g.homeTeam;
-    const isHome = g.team === g.homeTeam;
-    const oppRow = getOpponentRow(g);
-    const { result, isSow, isSol, isOtw, dispGf, dispGa } = getGameResult(g, oppRow);
-    const resultCls = (isSow || isOtw || g.w === 1) ? 'sched-result-w' : (isSol || g.otl === 1) ? 'sched-result-o' : 'sched-result-l';
-    const evDelta = g.xgf - g.xga;
-    const asDelta = g.axgf - g.axga;
-    const evDeltaStyle = deltaCellStyle(evDelta, h2hMaxEvDelta);
-    const asDeltaStyle = deltaCellStyle(asDelta, h2hMaxAsDelta);
-    const evDeltaStr = (evDelta >= 0 ? '+' : '') + evDelta.toFixed(2);
-    const asDeltaStr = (asDelta >= 0 ? '+' : '') + asDelta.toFixed(2);
-    const isPo = g.date >= '2026-04-17';
-    const key = `${g.date}_${g.homeTeam}_${g.awayTeam}`;
-    const rowCls = isPo ? 'sched-game-row po-row' : 'sched-game-row';
-    return `<div class="${rowCls}" data-gamekey="${key}" data-date="${g.date}" data-home="${g.homeTeam}" data-away="${g.awayTeam}">
-      <span class="sched-date-col">${g.date}</span>
-      <span class="sched-opp-col"><span class="sched-ha-badge">${isHome ? 'vs' : '@'}</span>${TEAM_NAMES[opp] || opp}</span>
-      <span class="${resultCls}">${result}</span>
-      <span class="sched-score-col">${dispGf}&#8211;${dispGa}</span>
-      <span class="sched-xg-col" style="${evDeltaStyle}padding:0 4px;border-radius:3px;text-align:center;">${evDeltaStr}</span>
-      <span class="sched-xg-col">${g.xgf.toFixed(2)}</span>
-      <span class="sched-xg-col">${g.xga.toFixed(2)}</span>
-      <span class="sched-xg-col" style="${asDeltaStyle}padding:0 4px;border-radius:3px;text-align:center;">${asDeltaStr}</span>
-      <span class="sched-xg-col">${g.axgf.toFixed(2)}</span>
-      <span class="sched-xg-col">${g.axga.toFixed(2)} <span class="sched-chevron">&#9662;</span></span>
-    </div>`;
-  }).join('');
-
-  // ── Video Coach view ─────────────────────────────────────
-  // ── Elenz Prescout view ──────────────────────────────────
-  if(role==='elenz'){
-
-    // ── Build season aggregates for all teams (for league ranks) ──
-    const ezSeasonMap = {};
-    for(const t of teams){
-      const rows = filtered.filter(r=>r.team===t);
-      if(!rows.length) continue;
-      const gp = rows.length;
-      const sum = (key) => rows.reduce((s,r)=>s+(isNaN(r[key])?0:r[key]),0);
-      const avg = (key) => sum(key)/gp;
-
-      // ES rebound
-      const esRebXgfTot = sum('esReboundXgf'); const esRebXgaTot = sum('esReboundXga');
-      // AS rebound
-      const asRebXgfTot = sum('asReboundXgf'); const asRebXgaTot = sum('asReboundXga');
-      // OMR
-      const omrTot = sum('esOmr'); const omrATot = sum('esOmrA');
-
-      ezSeasonMap[t] = {
-        gp,
-        esRebXgfPG:  esRebXgfTot/gp,   esRebXgaPG:   esRebXgaTot/gp,
-        asRebXgfPG:  asRebXgfTot/gp,   asRebXgaPG:   asRebXgaTot/gp,
-        omrPG: omrTot/gp,  omrAPG: omrATot/gp,
-        asTrueSh: avg('asTrueSh'), esTrueSh: avg('esTrueSh'),
-        asShPct:  avg('asShPct'),  esShPct:  avg('esShPct'),
-        esGradeA: avg('esGradeA'), esGradeAA: avg('esGradeAA'),
-        esGradeB: avg('esGradeB'), esGradeBA: avg('esGradeBA'),
-        esGradeC: avg('esGradeC'), esGradeCA: avg('esGradeCA'),
-        asGradeA: avg('asGradeA'), asGradeAA: avg('asGradeAA'),
-        asGradeB: avg('asGradeB'), asGradeBA: avg('asGradeBA'),
-        asGradeC: avg('asGradeC'), asGradeCA: avg('asGradeCA'),
-        esShotAttPG: avg('esShotAtt'), esShotsOnNetPG: avg('esShotsOnNet'),
-        asShotAttPG: avg('asShotAtt'), asShotsOnNetPG: avg('asShotsOnNet'),
-      };
-    }
-
-    // ── Rank helper ──
-    function ezRank(key, higherBetter=true){
-      const entries = Object.entries(ezSeasonMap)
-        .filter(([,v])=>v[key]!=null && !isNaN(v[key]))
-        .sort((a,b)=>higherBetter ? b[1][key]-a[1][key] : a[1][key]-b[1][key]);
-      const m={};
-      entries.forEach(([team],i)=>{
-        const val=ezSeasonMap[team][key];
-        const tied=entries.filter(([t])=>Math.abs(ezSeasonMap[t][key]-val)<0.0001).length;
-        const rk=entries.findIndex(([t])=>Math.abs(ezSeasonMap[t][key]-val)<0.0001)+1;
-        m[team]=tied>1?`T-${rk}`:`${rk}`;
-      });
-      return m;
-    }
-
-    // Pre-compute all rank maps
-    const ezRkEsRebXgf   = ezRank('esRebXgfPG',  true);
-    const ezRkEsRebXga   = ezRank('esRebXgaPG',  false);
-    const ezRkAsRebXgf   = ezRank('asRebXgfPG',  true);
-    const ezRkAsRebXga   = ezRank('asRebXgaPG',  false);
-    const ezRkOmr        = ezRank('omrPG',        true);
-    const ezRkOmrA       = ezRank('omrAPG',       false);
-    const ezRkAsTrueSh   = ezRank('asTrueSh',     true);
-    const ezRkEsTrueSh   = ezRank('esTrueSh',     true);
-    const ezRkAsShPct    = ezRank('asShPct',      true);
-    const ezRkEsShPct    = ezRank('esShPct',      true);
-    const ezRkEsGradeA   = ezRank('esGradeA',     true);
-    const ezRkEsGradeAA  = ezRank('esGradeAA',    false);
-    const ezRkEsGradeB   = ezRank('esGradeB',     true);
-    const ezRkEsGradeBA  = ezRank('esGradeBA',    false);
-    const ezRkEsGradeC   = ezRank('esGradeC',     true);
-    const ezRkEsGradeCA  = ezRank('esGradeCA',    false);
-    const ezRkAsGradeA   = ezRank('asGradeA',     true);
-    const ezRkAsGradeAA  = ezRank('asGradeAA',    false);
-    const ezRkAsGradeB   = ezRank('asGradeB',     true);
-    const ezRkAsGradeBA  = ezRank('asGradeBA',    false);
-    const ezRkAsGradeC   = ezRank('asGradeC',     true);
-    const ezRkAsGradeCA  = ezRank('asGradeCA',    false);
-    const ezRkEsShotAtt  = ezRank('esShotAttPG',  true);
-    const ezRkAsShotAtt  = ezRank('asShotAttPG',  true);
-
-    function ezR(rankMap, team){ const v=rankMap[team]; return v?`<span style="font-size:0.68rem;color:var(--text3);font-family:'DM Mono',monospace;">#${v}</span>`:''; }
-    function ezFmt(v, dec=3){ return (v==null||isNaN(v)) ? '—' : v.toFixed(dec); }
-    function ezPct(v){ return (v==null||isNaN(v)||v===0) ? '—' : (v*100).toFixed(1)+'%'; }
-
-    const sv = ezSeasonMap[teamB]; // opponent season stats
-    const svA = ezSeasonMap[teamA]; // your team season stats
-
-    // ── L5 aggregates for opponent ──
-    const filteredB = filtered.filter(r=>r.team===teamB).slice(-5);
-    const l5gp = filteredB.length || 5;
-
-    // ── Row builder helpers ──
-    function ezSectionHeader(label){
-      return `<div style="grid-column:1/-1;padding:0.4rem 0.75rem 0.15rem;font-size:0.63rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text3);border-top:1px solid var(--border);margin-top:0.1rem;">${label}</div>`;
-    }
-    function ezRow(label, valA, rankA, valB, rankB, isLast=false){
-      const border = isLast ? 'border-bottom:none;' : '';
-      return `<div class="h2h-ov-label" style="${border}">${label}</div>
-              <div class="h2h-ov-cell" style="${border}">${valA} ${rankA}</div>
-              <div class="h2h-ov-cell" style="${border}">${valB} ${rankB}</div>`;
-    }
-    function ezRowOpp(label, val, rank, isLast=false){
-      const border = isLast ? 'border-bottom:none;' : '';
-      return `<div class="h2h-ov-label" style="${border}">${label}</div>
-              <div class="h2h-ov-cell" style="grid-column:2/4;${border}">${val} ${rank}</div>`;
-    }
-
-    // ── Panel builder ──
-    function ezPanel(title, headerA, headerB, rowsHtml, cols='180px 1fr 1fr'){
-      return `<div class="h2h-overview" style="margin-bottom:0.75rem;">
-        <div class="h2h-overview-title">${title}</div>
-        <div class="h2h-overview-grid" style="grid-template-columns:${cols};">
-          <div class="h2h-ov-header">Stat</div>
-          <div class="h2h-ov-header team-a">${headerA}</div>
-          <div class="h2h-ov-header team-b">${headerB}</div>
-          ${rowsHtml}
-        </div>
-      </div>`;
-    }
-
-    // ── Chance Quality panels (Grade A/B/C — full picture vs Segall's A-only) ──
-    const gradeRowsES = [
-      ezSectionHeader('Grade A (per GP)'),
-      ezRow('For',     ezFmt(svA?.esGradeA,2),  ezR(ezRkEsGradeA,teamA),  ezFmt(sv?.esGradeA,2),  ezR(ezRkEsGradeA,teamB)),
-      ezRow('Against', ezFmt(svA?.esGradeAA,2), ezR(ezRkEsGradeAA,teamA), ezFmt(sv?.esGradeAA,2), ezR(ezRkEsGradeAA,teamB)),
-      ezSectionHeader('Grade B (per GP)'),
-      ezRow('For',     ezFmt(svA?.esGradeB,2),  ezR(ezRkEsGradeB,teamA),  ezFmt(sv?.esGradeB,2),  ezR(ezRkEsGradeB,teamB)),
-      ezRow('Against', ezFmt(svA?.esGradeBA,2), ezR(ezRkEsGradeBA,teamA), ezFmt(sv?.esGradeBA,2), ezR(ezRkEsGradeBA,teamB)),
-      ezSectionHeader('Grade C (per GP)'),
-      ezRow('For',     ezFmt(svA?.esGradeC,2),  ezR(ezRkEsGradeC,teamA),  ezFmt(sv?.esGradeC,2),  ezR(ezRkEsGradeC,teamB)),
-      ezRow('Against', ezFmt(svA?.esGradeCA,2), ezR(ezRkEsGradeCA,teamA), ezFmt(sv?.esGradeCA,2), ezR(ezRkEsGradeCA,teamB), true),
-    ].join('');
-
-    const gradeRowsAS = [
-      ezSectionHeader('Grade A (per GP)'),
-      ezRow('For',     ezFmt(svA?.asGradeA,2),  ezR(ezRkAsGradeA,teamA),  ezFmt(sv?.asGradeA,2),  ezR(ezRkAsGradeA,teamB)),
-      ezRow('Against', ezFmt(svA?.asGradeAA,2), ezR(ezRkAsGradeAA,teamA), ezFmt(sv?.asGradeAA,2), ezR(ezRkAsGradeAA,teamB)),
-      ezSectionHeader('Grade B (per GP)'),
-      ezRow('For',     ezFmt(svA?.asGradeB,2),  ezR(ezRkAsGradeB,teamA),  ezFmt(sv?.asGradeB,2),  ezR(ezRkAsGradeB,teamB)),
-      ezRow('Against', ezFmt(svA?.asGradeBA,2), ezR(ezRkAsGradeBA,teamA), ezFmt(sv?.asGradeBA,2), ezR(ezRkAsGradeBA,teamB)),
-      ezSectionHeader('Grade C (per GP)'),
-      ezRow('For',     ezFmt(svA?.asGradeC,2),  ezR(ezRkAsGradeC,teamA),  ezFmt(sv?.asGradeC,2),  ezR(ezRkAsGradeC,teamB)),
-      ezRow('Against', ezFmt(svA?.asGradeCA,2), ezR(ezRkAsGradeCA,teamA), ezFmt(sv?.asGradeCA,2), ezR(ezRkAsGradeCA,teamB), true),
-    ].join('');
-
-
-    // ── Rebound & OMR panel ──
-    const rebOmrRows = [
-      ezSectionHeader('ES Rebound Chances (xG/GP)'),
-      ezRow('Rebound xGF',    ezFmt(svA?.esRebXgfPG), ezR(ezRkEsRebXgf,teamA), ezFmt(sv?.esRebXgfPG), ezR(ezRkEsRebXgf,teamB)),
-      ezRow('Rebound xGA',    ezFmt(svA?.esRebXgaPG), ezR(ezRkEsRebXga,teamA), ezFmt(sv?.esRebXgaPG), ezR(ezRkEsRebXga,teamB)),
-      ezSectionHeader('AS Rebound Chances (xG/GP)'),
-      ezRow('Rebound xGF',    ezFmt(svA?.asRebXgfPG), ezR(ezRkAsRebXgf,teamA), ezFmt(sv?.asRebXgfPG), ezR(ezRkAsRebXgf,teamB)),
-      ezRow('Rebound xGA',    ezFmt(svA?.asRebXgaPG), ezR(ezRkAsRebXga,teamA), ezFmt(sv?.asRebXgaPG), ezR(ezRkAsRebXga,teamB)),
-      ezSectionHeader('Odd Man Rushes (ES, per GP)'),
-      ezRow('OMR For',        ezFmt(svA?.omrPG,2),  ezR(ezRkOmr,teamA),  ezFmt(sv?.omrPG,2),  ezR(ezRkOmr,teamB)),
-      ezRow('OMR Against',    ezFmt(svA?.omrAPG,2), ezR(ezRkOmrA,teamA), ezFmt(sv?.omrAPG,2), ezR(ezRkOmrA,teamB), true),
-    ].join('');
-
-    // ── Shooting & Volume panel ──
-    const shRows = [
-      ezSectionHeader('True Shooting % vs Raw Sh%'),
-      ezRow('AS True Sh%',    ezPct(svA?.asTrueSh/100), ezR(ezRkAsTrueSh,teamA), ezPct(sv?.asTrueSh/100), ezR(ezRkAsTrueSh,teamB)),
-      ezRow('AS Sh%',         ezPct(svA?.asShPct/100),  ezR(ezRkAsShPct,teamA),  ezPct(sv?.asShPct/100),  ezR(ezRkAsShPct,teamB)),
-      ezRow('ES True Sh%',    ezPct(svA?.esTrueSh/100), ezR(ezRkEsTrueSh,teamA), ezPct(sv?.esTrueSh/100), ezR(ezRkEsTrueSh,teamB)),
-      ezRow('ES Sh%',         ezPct(svA?.esShPct/100),  ezR(ezRkEsShPct,teamA),  ezPct(sv?.esShPct/100),  ezR(ezRkEsShPct,teamB)),
-      ezSectionHeader('Shot Volume (per GP)'),
-      ezRow('ES Shot Attempts',  ezFmt(svA?.esShotAttPG,1), ezR(ezRkEsShotAtt,teamA), ezFmt(sv?.esShotAttPG,1), ezR(ezRkEsShotAtt,teamB)),
-      ezRow('AS Shot Attempts',  ezFmt(svA?.asShotAttPG,1), ezR(ezRkAsShotAtt,teamA), ezFmt(sv?.asShotAttPG,1), ezR(ezRkAsShotAtt,teamB), true),
-    ].join('');
-
-    // ── L5 summary for opponent ──
-    const l5esRebF  = filteredB.reduce((s,r)=>s+r.esReboundXgf,0)/l5gp;
-    const l5esRebA  = filteredB.reduce((s,r)=>s+r.esReboundXga,0)/l5gp;
-    const l5asRebF  = filteredB.reduce((s,r)=>s+r.asReboundXgf,0)/l5gp;
-    const l5asRebA  = filteredB.reduce((s,r)=>s+r.asReboundXga,0)/l5gp;
-    const l5omr     = filteredB.reduce((s,r)=>s+r.esOmr,0)/l5gp;
-    const l5omrA    = filteredB.reduce((s,r)=>s+r.esOmrA,0)/l5gp;
-    const l5esGrA   = filteredB.reduce((s,r)=>s+r.esGradeA,0)/l5gp;
-    const l5esGrAA  = filteredB.reduce((s,r)=>s+r.esGradeAA,0)/l5gp;
-    const l5esGrB   = filteredB.reduce((s,r)=>s+r.esGradeB,0)/l5gp;
-    const l5esGrBA  = filteredB.reduce((s,r)=>s+r.esGradeBA,0)/l5gp;
-    const l5esGrC   = filteredB.reduce((s,r)=>s+r.esGradeC,0)/l5gp;
-    const l5esGrCA  = filteredB.reduce((s,r)=>s+r.esGradeCA,0)/l5gp;
-    const l5esTrueSh = filteredB.reduce((s,r)=>s+r.esTrueSh,0)/l5gp;
-    const l5esShPct  = filteredB.reduce((s,r)=>s+r.esShPct,0)/l5gp;
-    const l5gsax    = filteredB.reduce((s,r)=>s+(isNaN(r.gsax)?(r.xga-r.ga):r.gsax),0);
-
-    const l5Rows = [
-      ezSectionHeader('ES Grade A/B/C (Last 5, per GP)'),
-      ezRowOpp('Grade A For/Against',   `${ezFmt(l5esGrA,2)} / ${ezFmt(l5esGrAA,2)}`, ''),
-      ezRowOpp('Grade B For/Against',   `${ezFmt(l5esGrB,2)} / ${ezFmt(l5esGrBA,2)}`, ''),
-      ezRowOpp('Grade C For/Against',   `${ezFmt(l5esGrC,2)} / ${ezFmt(l5esGrCA,2)}`, ''),
-      ezSectionHeader('Rebounds & OMR (Last 5, per GP)'),
-      ezRowOpp('ES Rebound xGF/xGA',  `${ezFmt(l5esRebF)} / ${ezFmt(l5esRebA)}`, ''),
-      ezRowOpp('AS Rebound xGF/xGA',  `${ezFmt(l5asRebF)} / ${ezFmt(l5asRebA)}`, ''),
-      ezRowOpp('OMR For/Against',     `${ezFmt(l5omr,2)} / ${ezFmt(l5omrA,2)}`, ''),
-      ezSectionHeader('Shooting & Goaltending (Last 5)'),
-      ezRowOpp('ES True Sh% / Sh%',   `${ezPct(l5esTrueSh/100)} / ${ezPct(l5esShPct/100)}`, ''),
-      ezRowOpp('GSAx (ES, total)',    ezFmt(l5gsax,1), '', true),
-    ].join('');
-
-    // ── Goals breakdown: L5 / L10 / Season ──
-    function goalsBreakdown(team) {
-      const allRows = filtered.filter(r=>r.team===team);
-      const season  = allRows;
-      const l10     = allRows.slice(-10);
-      const l5      = allRows.slice(-5);
-      function totals(rows) {
-        if(!rows.length) return null;
-        const gp = rows.length;
-        const s = k => rows.reduce((a,r)=>a+(isNaN(r[k])?0:r[k]),0);
-        return {
-          gp,
-          gf:   s('gf')/gp,   ga:   s('ga')/gp,
-          esgf: s('esgf')/gp, esga: s('esga')/gp,
-          ppgf: s('ppGf')/gp, ppga: s('ppGa')/gp,
-          pkgf: s('pkGf')/gp, pkga: s('pkGa')/gp,
-        };
-      }
-      return { l5: totals(l5), l10: totals(l10), season: totals(season) };
-    }
-
-    const gbA = goalsBreakdown(teamA);
-    const gbB = goalsBreakdown(teamB);
-
-    // ── Build inline SVG grouped bar chart ──
-    function svgBars(labelsAndValues, colorF, colorA) {
-      // labelsAndValues: [{label, vF, vA}]
-      const W=420, H=130, padL=56, padR=10, padT=12, padB=24;
-      const chartW = W-padL-padR;
-      const chartH = H-padT-padB;
-      const maxVal = Math.max(...labelsAndValues.flatMap(d=>[d.vF,d.vA]), 0.5);
-      const n = labelsAndValues.length;
-      const grpW = chartW/n;
-      const barW = Math.min(grpW*0.35, 18);
-      const gap  = 3;
-
-      const scaleY = v => chartH - (v/maxVal)*chartH;
-      const barH   = v => (v/maxVal)*chartH;
-
-      // y-axis gridlines (3 lines)
-      let gridLines='', yLabels='';
-      [0.5, 1.0].forEach(frac=>{
-        const yv = maxVal*frac;
-        const yp = padT + scaleY(yv);
-        gridLines+=`<line x1="${padL}" y1="${yp}" x2="${W-padR}" y2="${yp}" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="3,3"/>`;
-        yLabels+=`<text x="${padL-3}" y="${yp+3.5}" text-anchor="end" font-size="8" fill="var(--text3)">${yv.toFixed(1)}</text>`;
-      });
-
-      let bars='', xLabels='';
-      labelsAndValues.forEach((d,i)=>{
-        const cx = padL + grpW*i + grpW/2;
-        const xF = cx - barW - gap/2;
-        const xA = cx + gap/2;
-        const hF = barH(d.vF), hA = barH(d.vA);
-        bars+=`<rect x="${xF.toFixed(1)}" y="${(padT+scaleY(d.vF)).toFixed(1)}" width="${barW}" height="${hF.toFixed(1)}" rx="2" fill="${colorF}" opacity="0.85"/>`;
-        bars+=`<rect x="${xA.toFixed(1)}" y="${(padT+scaleY(d.vA)).toFixed(1)}" width="${barW}" height="${hA.toFixed(1)}" rx="2" fill="${colorA}" opacity="0.85"/>`;
-        xLabels+=`<text x="${cx.toFixed(1)}" y="${H-6}" text-anchor="middle" font-size="8.5" fill="var(--text3)">${d.label}</text>`;
-      });
-
-      return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;">
-        ${gridLines}${yLabels}
-        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT+chartH}" stroke="var(--border)" stroke-width="0.5"/>
-        <line x1="${padL}" y1="${padT+chartH}" x2="${W-padR}" y2="${padT+chartH}" stroke="var(--border)" stroke-width="0.5"/>
-        ${bars}${xLabels}
-      </svg>`;
-    }
-
-    // ── Goals table rows for one team ──
-    function gbRows(gb) {
-      if(!gb.l5 || !gb.l10 || !gb.season) return '<div style="color:var(--text3);padding:0.5rem;">Not enough data</div>';
-      const f = v => (v==null||isNaN(v)) ? '—' : v.toFixed(2);
-      const row = (label, keyF, keyA, isLast=false) => {
-        const border = isLast ? 'border-bottom:none;' : '';
-        return `<div class="h2h-ov-label" style="${border}">${label}</div>
-                <div class="h2h-ov-cell" style="${border}">${f(gb.l5[keyF])} / ${f(gb.l5[keyA])}</div>
-                <div class="h2h-ov-cell" style="${border}">${f(gb.l10[keyF])} / ${f(gb.l10[keyA])}</div>
-                <div class="h2h-ov-cell" style="${border}">${f(gb.season[keyF])} / ${f(gb.season[keyA])}</div>`;
-      };
-      return `
-        <div class="h2h-ov-header">Strength</div>
-        <div class="h2h-ov-header">Last 5 GF/GA</div>
-        <div class="h2h-ov-header">Last 10 GF/GA</div>
-        <div class="h2h-ov-header">Season GF/GA</div>
-        ${row('Total',  'gf',   'ga')}
-        ${row('ES',     'esgf', 'esga')}
-        ${row('PP/PK',  'ppgf', 'ppga')}
-        ${row('PK/PP',  'pkgf', 'pkga', true)}`;
-    }
-
-    // ── Chart data builders ──
-    function gbChartData(gb) {
-      if(!gb.l5||!gb.l10||!gb.season) return [];
-      return [
-        { label:'Total L5',  vF: gb.l5.gf,    vA: gb.l5.ga    },
-        { label:'ES L5',     vF: gb.l5.esgf,  vA: gb.l5.esga  },
-        { label:'Total L10', vF: gb.l10.gf,   vA: gb.l10.ga   },
-        { label:'ES L10',    vF: gb.l10.esgf, vA: gb.l10.esga },
-        { label:'Total S',   vF: gb.season.gf,   vA: gb.season.ga   },
-        { label:'ES S',      vF: gb.season.esgf, vA: gb.season.esga },
-      ];
-    }
-
-    // colours for GF (green) / GA (red)
-    const clrGF='#2e7d32', clrGA='#c0392b';
-
-    // ── Render ──
-    content.innerHTML=`
-      <div style="display:flex;flex-direction:column;gap:1rem;padding:0.25rem 0;">
-
-        <!-- Goals For / Against Breakdown -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-
-          <div class="h2h-overview">
-            <div class="h2h-overview-title">${nameA.toUpperCase()} — GF / GA BY STRENGTH</div>
-            <div style="display:flex;gap:0.5rem;align-items:center;padding:0.3rem 0.75rem 0;font-size:0.68rem;color:var(--text3);">
-              <span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${clrGF};opacity:0.85;"></span>GF &nbsp;
-              <span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${clrGA};opacity:0.85;"></span>GA
-            </div>
-            <div style="padding:0.25rem 0.5rem 0;">${svgBars(gbChartData(gbA), clrGF, clrGA)}</div>
-            <div class="h2h-overview-grid" style="grid-template-columns:80px 1fr 1fr 1fr;">
-              ${gbRows(gbA)}
-            </div>
-          </div>
-
-          <div class="h2h-overview">
-            <div class="h2h-overview-title">${nameB.toUpperCase()} — GF / GA BY STRENGTH</div>
-            <div style="display:flex;gap:0.5rem;align-items:center;padding:0.3rem 0.75rem 0;font-size:0.68rem;color:var(--text3);">
-              <span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${clrGF};opacity:0.85;"></span>GF &nbsp;
-              <span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${clrGA};opacity:0.85;"></span>GA
-            </div>
-            <div style="padding:0.25rem 0.5rem 0;">${svgBars(gbChartData(gbB), clrGF, clrGA)}</div>
-            <div class="h2h-overview-grid" style="grid-template-columns:80px 1fr 1fr 1fr;">
-              ${gbRows(gbB)}
-            </div>
-          </div>
-
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-          ${ezPanel(`ES CHANCE QUALITY — SEASON`, fmtTeamHeader(nameA), fmtTeamHeader(nameB), gradeRowsES)}
-          ${ezPanel(`AS CHANCE QUALITY — SEASON`, fmtTeamHeader(nameA), fmtTeamHeader(nameB), gradeRowsAS)}
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;align-items:start;">
-
-          <div style="display:flex;flex-direction:column;gap:1rem;">
-            ${ezPanel(`REBOUNDS &amp; ODD MAN RUSHES`, fmtTeamHeader(nameA), fmtTeamHeader(nameB), rebOmrRows)}
-          </div>
-
-          <div style="display:flex;flex-direction:column;gap:1rem;">
-            ${ezPanel(`SHOOTING &amp; VOLUME`, fmtTeamHeader(nameA), fmtTeamHeader(nameB), shRows)}
-          </div>
-
-          <div style="display:flex;flex-direction:column;gap:1rem;">
-            <div class="h2h-overview">
-              <div class="h2h-overview-title">LAST 5 GAMES</div>
-              <div class="h2h-overview-grid" style="grid-template-columns:180px 1fr 1fr;">
-                <div class="h2h-ov-header">Stat</div>
-                <div class="h2h-ov-header team-b" style="grid-column:2/4;">Value</div>
-                ${l5Rows}
-              </div>
-            </div>
-            <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;">
-              <div class="sched-header-row" style="border-radius:0;position:static;grid-template-columns:80px 1fr 60px 60px 70px 70px 70px;">
-                <span>Date</span><span>Opp</span><span style="text-align:center">Res</span><span style="text-align:center">Score</span>
-                <span style="text-align:center">ES xG&#916;</span><span style="text-align:center">ES TrSh%</span><span style="text-align:center">GSAx</span>
-              </div>
-              <div id="ez-game-log">${(()=>{
-                const bGames = filtered.filter(r=>r.team===teamB).slice(-8).reverse();
-                return bGames.map(g=>{
-                  const win=g.w>0; const loss=g.l>0; const otl=g.otl>0;
-                  const res=win?'W':loss?'L':'OT';
-                  const rc=win?'#067a3f':loss?'#c0392b':'#856404';
-                  const esDelta=(g.xgf-g.xga).toFixed(2);
-                  const esdStyle=parseFloat(esDelta)>=0?'color:#067a3f':'color:#c0392b';
-                  return `<div class="sched-game-row" style="grid-template-columns:80px 1fr 60px 60px 70px 70px 70px;cursor:default;">
-                    <span>${g.date.slice(5)}</span>
-                    <span>${g.homeTeam===g.team?g.awayTeam:'@ '+g.homeTeam}</span>
-                    <span style="text-align:center;color:${rc};font-weight:700;">${res}</span>
-                    <span style="text-align:center;">${g.gf}-${g.ga}</span>
-                    <span style="text-align:center;${esdStyle};">${parseFloat(esDelta)>=0?'+':''}${esDelta}</span>
-                    <span style="text-align:center;">${ezPct(g.esTrueSh/100)}</span>
-                    <span style="text-align:center;">${(g.xga-g.ga).toFixed(2)}</span>
-                  </div>`;
-                }).join('');
-              })()}</div>
-            </div>
-          </div>
-
-        </div>
-
-      </div>`;
-    return;
-  }
-  if(role==='video-coach'){
-    // Season-level chance/OMR stats for all teams (for ranks)
-    const vcSeasonMap = {};
-    for(const t of teams){
-      const rows = filtered.filter(r=>r.team===t);
-      if(!rows.length) continue;
-      const gp = rows.length;
-      const esRushXgf  = rows.reduce((s,r)=>s+r.esRushXgf,0);
-      const esRushXga  = rows.reduce((s,r)=>s+r.esRushXga,0);
-      const esCycleXgf = rows.reduce((s,r)=>s+r.esCycleXgf,0);
-      const esCycleXga = rows.reduce((s,r)=>s+r.esCycleXga,0);
-      const esFcXgf    = rows.reduce((s,r)=>s+r.esFcXgf,0);
-      const esFcXga    = rows.reduce((s,r)=>s+r.esFcXga,0);
-      vcSeasonMap[t] = {
-        esGradeA:  rows.reduce((s,r)=>s+r.esGradeA,0)/gp,
-        esGradeAA: rows.reduce((s,r)=>s+r.esGradeAA,0)/gp,
-        esGradeB:  rows.reduce((s,r)=>s+r.esGradeB,0)/gp,
-        esGradeBA: rows.reduce((s,r)=>s+r.esGradeBA,0)/gp,
-        esGradeC:  rows.reduce((s,r)=>s+r.esGradeC,0)/gp,
-        esGradeCA: rows.reduce((s,r)=>s+r.esGradeCA,0)/gp,
-        esOmr:     rows.reduce((s,r)=>s+r.esOmr,0)/gp,
-        esOmrA:    rows.reduce((s,r)=>s+r.esOmrA,0)/gp,
-        esLpr:     rows.reduce((s,r)=>s+r.esLpr,0)/gp,
-        esLprA:    rows.reduce((s,r)=>s+r.esLprA,0)/gp,
-        esLprPct:  (()=>{ const f=rows.reduce((s,r)=>s+r.esLpr,0), a=rows.reduce((s,r)=>s+r.esLprA,0); return f+a>0?f/(f+a)*100:50; })(),
-        esOzPoss:  rows.reduce((s,r)=>s+r.esOzPoss,0)/gp,
-        esOzPossA: rows.reduce((s,r)=>s+r.esOzPossA,0)/gp,
-        esScreened:  rows.reduce((s,r)=>s+r.esScreened,0)/gp,
-        esScreenedA: rows.reduce((s,r)=>{
-          const gid=r.date+'_'+r.homeTeam+'_'+r.awayTeam;
-          const pair=window._gamePairs[gid]||{};
-          const oppTeam=Object.keys(pair).find(t=>t!==r.team);
-          const oppRow=oppTeam?pair[oppTeam]:null;
-          return s+(oppRow?oppRow.esScreened:0);
-        },0)/gp,
-        esDumpIn:    rows.reduce((s,r)=>s+r.esDumpIn,0)/gp,
-        esDumpInRec: rows.reduce((s,r)=>s+r.esDumpInRec,0)/gp,
-        esDumpInPct: (()=>{ const di=rows.reduce((s,r)=>s+r.esDumpIn,0), rec=rows.reduce((s,r)=>s+r.esDumpInRec,0); return di>0?rec/di*100:0; })(),
-        esDumpInA:    rows.reduce((s,r)=>{
-          const gid=r.date+'_'+r.homeTeam+'_'+r.awayTeam;
-          const pair=window._gamePairs[gid]||{};
-          const oppTeam=Object.keys(pair).find(t=>t!==r.team);
-          const oppRow=oppTeam?pair[oppTeam]:null;
-          return s+(oppRow?oppRow.esDumpIn:0);
-        },0)/gp,
-        esDumpInRecA: rows.reduce((s,r)=>{
-          const gid=r.date+'_'+r.homeTeam+'_'+r.awayTeam;
-          const pair=window._gamePairs[gid]||{};
-          const oppTeam=Object.keys(pair).find(t=>t!==r.team);
-          const oppRow=oppTeam?pair[oppTeam]:null;
-          return s+(oppRow?oppRow.esDumpInRec:0);
-        },0)/gp,
-        esDumpInPctA: (()=>{
-          const diA=rows.reduce((s,r)=>{
-            const gid=r.date+'_'+r.homeTeam+'_'+r.awayTeam;
-            const pair=window._gamePairs[gid]||{};
-            const oppTeam=Object.keys(pair).find(t=>t!==r.team);
-            const oppRow=oppTeam?pair[oppTeam]:null;
-            return s+(oppRow?oppRow.esDumpIn:0);
-          },0);
-          const recA=rows.reduce((s,r)=>{
-            const gid=r.date+'_'+r.homeTeam+'_'+r.awayTeam;
-            const pair=window._gamePairs[gid]||{};
-            const oppTeam=Object.keys(pair).find(t=>t!==r.team);
-            const oppRow=oppTeam?pair[oppTeam]:null;
-            return s+(oppRow?oppRow.esDumpInRec:0);
-          },0);
-          return diA>0?recA/diA*100:0;
-        })(),
-        esRushXgf:  esRushXgf/gp,  esRushXga:  esRushXga/gp,
-        esCycleXgf: esCycleXgf/gp, esCycleXga: esCycleXga/gp,
-        esFcXgf:    esFcXgf/gp,    esFcXga:    esFcXga/gp,
-        esRushXgfPct:  esRushXgf+esRushXga>0  ? esRushXgf/(esRushXgf+esRushXga)*100   : 50,
-        esCycleXgfPct: esCycleXgf+esCycleXga>0? esCycleXgf/(esCycleXgf+esCycleXga)*100: 50,
-        esFcXgfPct:    esFcXgf+esFcXga>0      ? esFcXgf/(esFcXgf+esFcXga)*100         : 50,
-        asShotAtt: rows.reduce((s,r)=>s+r.asShotAtt,0)/gp,
-        asShotAttA: rows.reduce((s,r)=>{
-          const gid = r.date+'_'+r.homeTeam+'_'+r.awayTeam;
-          const pair = window._gamePairs[gid]||{};
-          const oppTeam = Object.keys(pair).find(t=>t!==r.team);
-          const oppRow = oppTeam ? pair[oppTeam] : null;
-          return s + (oppRow ? oppRow.asShotAtt : 0);
-        },0)/gp,
-      };
-    }
-    function vcSeasonRank(key, higherBetter=true) {
-      const entries = Object.entries(vcSeasonMap)
-        .filter(([,v])=>v[key]!=null)
-        .sort((a,b)=>higherBetter ? b[1][key]-a[1][key] : a[1][key]-b[1][key]);
-      const m = {};
-      entries.forEach(([team],i)=>{
-        const val = vcSeasonMap[team][key];
-        const tied = entries.filter(([t])=>Math.abs(vcSeasonMap[t][key]-val)<0.0001).length;
-        const r = entries.findIndex(([t])=>Math.abs(vcSeasonMap[t][key]-val)<0.0001)+1;
-        m[team] = tied>1?`T-${r}`:`${r}`;
-      });
-      return m;
-    }
-    const vcSRankGA      = vcSeasonRank('esGradeA',      true);
-    const vcSRankGAA     = vcSeasonRank('esGradeAA',     false);
-    const vcSRankGB      = vcSeasonRank('esGradeB',      true);
-    const vcSRankGBA     = vcSeasonRank('esGradeBA',     false);
-    const vcSRankGC      = vcSeasonRank('esGradeC',      true);
-    const vcSRankGCA     = vcSeasonRank('esGradeCA',     false);
-    const vcSRankOMR     = vcSeasonRank('esOmr',         true);
-    const vcSRankOMRA    = vcSeasonRank('esOmrA',        false);
-    const vcSRankRushF   = vcSeasonRank('esRushXgf',     true);
-    const vcSRankRushA   = vcSeasonRank('esRushXga',     false);
-    const vcSRankCycleF  = vcSeasonRank('esCycleXgf',    true);
-    const vcSRankCycleA  = vcSeasonRank('esCycleXga',    false);
-    const vcSRankFcF     = vcSeasonRank('esFcXgf',       true);
-    const vcSRankFcA     = vcSeasonRank('esFcXga',       false);
-    const vcSRankRushPct = vcSeasonRank('esRushXgfPct',  true);
-    const vcSRankCyclPct = vcSeasonRank('esCycleXgfPct', true);
-    const vcSRankFcPct   = vcSeasonRank('esFcXgfPct',    true);
-    const vcSRankShotAtt  = vcSeasonRank('asShotAtt',      true);
-    const vcSRankShotAttA = vcSeasonRank('asShotAttA',     false);
-    const vcSRankLprPct   = vcSeasonRank('esLprPct',       true);
-    const vcSRankOzPoss   = vcSeasonRank('esOzPoss',       true);
-    const vcSRankOzPossA  = vcSeasonRank('esOzPossA',      false);
-    const vcSRankScreened = vcSeasonRank('esScreened',     true);
-    const vcSRankScreenedA= vcSeasonRank('esScreenedA',    false);
-    const vcSRankDumpInPct= vcSeasonRank('esDumpInPct',    true);
-    const vcSRankDumpInPctA=vcSeasonRank('esDumpInPctA',   false);
-
-    function vcRnk(rankMap, team) {
-      const v = rankMap[team];
-      return v ? `<span class="h2h-ov-rank">(#${v})</span>` : '';
-    }
-    function pctBg(pct) {
-      if (pct === null) return '';
-      const delta = pct - 50;
-      const intensity = Math.min(Math.abs(delta) / 10, 1);
-      if (delta >= 0) {
-        const g = Math.round(122 + intensity * 40);
-        const a = (0.12 + intensity * 0.25).toFixed(2);
-        return 'background:rgba(6,' + g + ',63,' + a + ');';
-      } else {
-        const r = Math.round(180 + intensity * 32);
-        const a = (0.12 + intensity * 0.25).toFixed(2);
-        return 'background:rgba(' + r + ',57,43,' + a + ');';
-      }
-    }
-    // Mini row for compact stacked display (same 4-col grid, smaller font)
-    function vcMiniRow(label, forVal, forRank, agaVal, agaRank, isLast=false) {
-      const border = isLast ? 'border-bottom:none;' : '';
-      const style = 'font-size:0.75rem;padding:0.18rem 0.5rem;color:var(--text2);';
-      return '<div class="h2h-ov-label" style="' + border + style + '">' + label + '</div>'
-           + '<div class="h2h-ov-cell" style="' + border + style + '">' + forVal + ' ' + forRank + '</div>'
-           + '<div class="h2h-ov-cell" style="' + border + style + '"></div>'
-           + '<div class="h2h-ov-cell" style="' + border + style + '">' + agaVal + ' ' + agaRank + '</div>';
-    }
-    // Subheader spanning all 4 columns
-    function vcSubheader(label) {
-      return '<div style="grid-column:1/5;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);padding:0.35rem 0.5rem 0.1rem;border-top:1px solid var(--border);">' + label + '</div>';
-    }
-    // Standard row (label / for / against)
-    function vcRow(label, forVal, forRank, agaVal, agaRank, isLast=false) {
-      const border = isLast ? 'border-bottom:none;' : '';
-      return '<div class="h2h-ov-label" style="' + border + '">' + label + '</div>'
-           + '<div class="h2h-ov-cell" style="' + border + '">' + forVal + ' ' + forRank + '</div>'
-           + '<div class="h2h-ov-cell" style="' + border + '"></div>'
-           + '<div class="h2h-ov-cell" style="' + border + '">' + agaVal + ' ' + agaRank + '</div>';
-    }
-    // Chance row: label / for value | xGF% centred with shading | against value
-    // Uses a 5-column sub-layout inside a span-3 cell
-    function vcChanceRow(label, forVal, forRank, pct, pctRankMap, agaVal, agaRank, isLast=false) {
-      const border = isLast ? 'border-bottom:none;' : '';
-      const bg = pctBg(pct);
-      const pctDisplay = pct !== null ? pct.toFixed(1) + '%' : '—';
-      const pctRnk = pct !== null ? vcRnk(pctRankMap, teamB) : '';
-      return '<div class="h2h-ov-label" style="' + border + '">' + label + '</div>'
-           + '<div class="h2h-ov-cell" style="' + border + 'text-align:right;">' + forVal + ' ' + forRank + '</div>'
-           + '<div class="h2h-ov-cell" style="' + border + bg + 'text-align:center;font-weight:600;">' + pctDisplay + ' ' + pctRnk + '</div>'
-           + '<div class="h2h-ov-cell" style="' + border + 'text-align:left;">' + agaVal + ' ' + agaRank + '</div>';
-    }
-    const sv = vcSeasonMap[teamB];
-    const l5v = l5B;
-
-    // Helper to format per-game from season totals (already per-game in vcSeasonMap)
-    // l5 totals are raw 5-game sums, divide by gp (actual games played, may be <5 early season)
-    const l5gp = l5v ? (l5v.gp || 5) : 5;
-
-    function vcSeasonChanceRows() {
-      const rows = [
-        vcChanceRow('ES Rush xGF/GP',      sv?sv.esRushXgf.toFixed(3):'—',  vcRnk(vcSRankRushF,teamB),  sv?sv.esRushXgfPct:null,  vcSRankRushPct,  sv?sv.esRushXga.toFixed(3):'—',  vcRnk(vcSRankRushA,teamB)),
-        vcChanceRow('ES Cycle xGF/GP',     sv?sv.esCycleXgf.toFixed(3):'—', vcRnk(vcSRankCycleF,teamB), sv?sv.esCycleXgfPct:null, vcSRankCyclPct,  sv?sv.esCycleXga.toFixed(3):'—', vcRnk(vcSRankCycleA,teamB)),
-        vcChanceRow('ES Forecheck xGF/GP', sv?sv.esFcXgf.toFixed(3):'—',    vcRnk(vcSRankFcF,teamB),    sv?sv.esFcXgfPct:null,    vcSRankFcPct,    sv?sv.esFcXga.toFixed(3):'—',    vcRnk(vcSRankFcA,teamB)),
-        vcSubheader('Chance Grades'),
-        vcMiniRow('ES A Chances/GP', sv?sv.esGradeA.toFixed(2):'—',  vcRnk(vcSRankGA,teamB),  sv?sv.esGradeAA.toFixed(2):'—', vcRnk(vcSRankGAA,teamB)),
-        vcMiniRow('ES B Chances/GP', sv?sv.esGradeB.toFixed(2):'—',  vcRnk(vcSRankGB,teamB),  sv?sv.esGradeBA.toFixed(2):'—', vcRnk(vcSRankGBA,teamB)),
-        vcMiniRow('ES C Chances/GP', sv?sv.esGradeC.toFixed(2):'—',  vcRnk(vcSRankGC,teamB),  sv?sv.esGradeCA.toFixed(2):'—', vcRnk(vcSRankGCA,teamB), true),
-      ];
-      return rows.join('');
-    }
-
-    function vcL5ChanceRows() {
-      const rows = [
-        vcChanceRow('ES Rush xGF/GP',      l5v?(l5v.esRushXgf/l5gp).toFixed(3):'—',  vcRnk(l5RankRushF,teamB),  l5v?l5v.esRushXgfPct:null,  l5RankRushPct,  l5v?(l5v.esRushXga/l5gp).toFixed(3):'—',  vcRnk(l5RankRushA,teamB)),
-        vcChanceRow('ES Cycle xGF/GP',     l5v?(l5v.esCycleXgf/l5gp).toFixed(3):'—', vcRnk(l5RankCycleF,teamB), l5v?l5v.esCycleXgfPct:null, l5RankCyclPct,  l5v?(l5v.esCycleXga/l5gp).toFixed(3):'—', vcRnk(l5RankCycleA,teamB)),
-        vcChanceRow('ES Forecheck xGF/GP', l5v?(l5v.esFcXgf/l5gp).toFixed(3):'—',    vcRnk(l5RankFcF,teamB),    l5v?l5v.esFcXgfPct:null,    l5RankFcPct,    l5v?(l5v.esFcXga/l5gp).toFixed(3):'—',    vcRnk(l5RankFcA,teamB)),
-        vcSubheader('Chance Grades'),
-        vcMiniRow('ES A Chances/GP', l5v?(l5v.esGradeA/l5gp).toFixed(2):'—', vcRnk(l5RankGradeA,teamB),  l5v?(l5v.esGradeAA/l5gp).toFixed(2):'—', vcRnk(l5RankGradeAA,teamB)),
-        vcMiniRow('ES B Chances/GP', l5v?(l5v.esGradeB/l5gp).toFixed(2):'—', vcRnk(l5RankGradeB,teamB),  l5v?(l5v.esGradeBA/l5gp).toFixed(2):'—', vcRnk(l5RankGradeBA,teamB)),
-        vcMiniRow('ES C Chances/GP', l5v?(l5v.esGradeC/l5gp).toFixed(2):'—', vcRnk(l5RankGradeC,teamB),  l5v?(l5v.esGradeCA/l5gp).toFixed(2):'—', vcRnk(l5RankGradeCA,teamB), true),
-      ];
-      return rows.join('');
-    }
-
-    function vcChancePanel(title, rowsHtml) {
-      return `
-        <div class="h2h-overview" style="margin-top:0.75rem;">
-          <div class="h2h-overview-title">${title}</div>
-          <div class="h2h-overview-grid" style="grid-template-columns:minmax(0,1fr) 110px 110px 110px;">
-            <div class="h2h-ov-header">Stat</div>
-            <div class="h2h-ov-header team-b">For</div>
-            <div class="h2h-ov-header team-b">xGF%</div>
-            <div class="h2h-ov-header team-b">Against</div>
-            ${rowsHtml}
-          </div>
-        </div>`;
-    }
-
-    content.innerHTML=`
-      <style>
-        .vc-layout { display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,0.8fr); gap:1rem; align-items:flex-start; }
-        .vc-stat-col { display:flex; flex-direction:column; gap:0; min-width:0; }
-        .vc-player-col { display:flex; flex-direction:column; gap:0.75rem; min-width:0; }
-        .vc-player-col #vc-player-panel, .vc-player-col #vc-l5-player-panel { flex:1; }
-        @media (max-width:1200px) {
-          .vc-layout { grid-template-columns: 1fr 1fr; }
-          .vc-player-col { grid-column: 1 / -1; flex-direction:row; gap:1rem; width:auto; }
-          .vc-player-col .h2h-overview { flex:1; min-width:0; }
-        }
-        @media (max-width:700px) {
-          .vc-layout { grid-template-columns: 1fr; }
-          .vc-player-col { flex-direction:column; grid-column:auto; }
-        }
-      </style>
-      <div class="vc-layout">
-        <div class="vc-stat-col">
-          <div class="h2h-overview">
-            <div class="h2h-overview-title">SEASON OVERVIEW</div>
-            <div class="h2h-overview-grid">
-              <div class="h2h-ov-header">Stat</div>
-              <div class="h2h-ov-header team-a">${fmtTeamHeader(nameA)}</div>
-              <div class="h2h-ov-header team-b">${fmtTeamHeader(nameB)}</div>
-              ${ovRowsHtml}
-            </div>
-          </div>
-          ${vcChancePanel(`SCORING CHANCES &amp; RUSHES &#8212; ${nameB.toUpperCase()} (SEASON)`, vcSeasonChanceRows())}
-          ${(()=>{
-            const fmtOz = s => { const m=Math.floor(s/60), sec=String(Math.round(s%60)).padStart(2,'0'); return `${m}:${sec}`; };
-            const rows = [
-              vcRow('ES LPR%',            sv?(sv.esLprPct).toFixed(1)+'%':'—',    vcRnk(vcSRankLprPct,teamB),    sv?(100-sv.esLprPct).toFixed(1)+'%':'—', vcRnk(vcSRankLprPct,teamB)),
-              vcRow('ES OMR/GP',          sv?sv.esOmr.toFixed(2):'—',              vcRnk(vcSRankOMR,teamB),       sv?sv.esOmrA.toFixed(2):'—', vcRnk(vcSRankOMRA,teamB)),
-              vcRow('ES OZ Poss/GP',      sv?fmtOz(sv.esOzPoss):'—',              vcRnk(vcSRankOzPoss,teamB),    sv?fmtOz(sv.esOzPossA):'—', vcRnk(vcSRankOzPossA,teamB)),
-              vcRow('AS Shot Attempts/GP',sv?sv.asShotAtt.toFixed(1):'—',         vcRnk(vcSRankShotAtt,teamB),   sv?sv.asShotAttA.toFixed(1):'—', vcRnk(vcSRankShotAttA,teamB)),
-              vcRow('ES Screened SOG/GP', sv?sv.esScreened.toFixed(1):'—',        vcRnk(vcSRankScreened,teamB),  sv?sv.esScreenedA.toFixed(1):'—', vcRnk(vcSRankScreenedA,teamB)),
-              vcRow('ES Dump-in Rec%',    sv?(sv.esDumpInPct).toFixed(1)+'%':'—', vcRnk(vcSRankDumpInPct,teamB), sv?(sv.esDumpInPctA).toFixed(1)+'%':'—', vcRnk(vcSRankDumpInPctA,teamB), true),
-            ].join('');
-            return `<div class="h2h-overview" style="margin-top:0.75rem;">
-              <div class="h2h-overview-title">TEAM STATS &#8212; ${nameB.toUpperCase()} (SEASON)</div>
-              <div class="h2h-overview-grid" style="grid-template-columns:minmax(0,1fr) 110px 110px 110px;">
-                <div class="h2h-ov-header">Stat</div>
-                <div class="h2h-ov-header team-b">For</div>
-                <div class="h2h-ov-header"></div>
-                <div class="h2h-ov-header team-b">Against</div>
-                ${rows}
-              </div>
-            </div>`;
-          })()}
-        </div>
-        <div class="vc-stat-col">
-          <div class="h2h-overview">
-            <div class="h2h-overview-title">LAST 5 GAMES</div>
-            <div class="h2h-overview-grid">
-              <div class="h2h-ov-header">Stat</div>
-              <div class="h2h-ov-header team-a">${fmtTeamHeader(nameA)}</div>
-              <div class="h2h-ov-header team-b">${fmtTeamHeader(nameB)}</div>
-              ${l5RowsHtml}
-            </div>
-          </div>
-          ${vcChancePanel(`SCORING CHANCES &amp; RUSHES &#8212; ${nameB.toUpperCase()} (LAST 5)`, vcL5ChanceRows())}
-          ${(()=>{
-            const fmtOz = s => { const m=Math.floor(s/60), sec=String(Math.round(s%60)).padStart(2,'0'); return `${m}:${sec}`; };
-            const rows = [
-              vcRow('ES LPR%',            l5v?(l5v.esLprPct).toFixed(1)+'%':'—',             vcRnk(l5RankLprPct,teamB),    l5v?(100-l5v.esLprPct).toFixed(1)+'%':'—', vcRnk(l5RankLprPct,teamB)),
-              vcRow('ES OMR/GP',          l5v?(l5v.esOmr/l5gp).toFixed(2):'—',               vcRnk(l5RankOmr,teamB),       l5v?(l5v.esOmrA/l5gp).toFixed(2):'—', vcRnk(l5RankOmrA,teamB)),
-              vcRow('ES OZ Poss/GP',      l5v?fmtOz(l5v.esOzPoss/l5gp):'—',                 vcRnk(l5RankOzPoss,teamB),    l5v?fmtOz(l5v.esOzPossA/l5gp):'—', vcRnk(l5RankOzPossA,teamB)),
-              vcRow('AS Shot Attempts/GP',l5v?(l5v.asShotAtt/l5gp).toFixed(1):'—',           vcRnk(l5RankShotAtt,teamB),   l5v?(l5v.asShotAttA/l5gp).toFixed(1):'—', vcRnk(l5RankShotAttA,teamB)),
-              vcRow('ES Screened SOG/GP', l5v?(l5v.esScreened/l5gp).toFixed(1):'—',          vcRnk(l5RankScreened,teamB),  l5v?(l5v.esScreenedA/l5gp).toFixed(1):'—', vcRnk(l5RankScreenedA,teamB)),
-              vcRow('ES Dump-in Rec%',       l5v?(l5v.esDumpInPct).toFixed(1)+'%':'—',          vcRnk(l5RankDumpInPct,teamB), l5v?(l5v.esDumpInPctA).toFixed(1)+'%':'—', vcRnk(l5RankDumpInPctA,teamB), true),
-            ].join('');
-            return `<div class="h2h-overview" style="margin-top:0.75rem;">
-              <div class="h2h-overview-title">TEAM STATS &#8212; ${nameB.toUpperCase()} (LAST 5)</div>
-              <div class="h2h-overview-grid" style="grid-template-columns:minmax(0,1fr) 110px 110px 110px;">
-                <div class="h2h-ov-header">Stat</div>
-                <div class="h2h-ov-header team-b">For</div>
-                <div class="h2h-ov-header"></div>
-                <div class="h2h-ov-header team-b">Against</div>
-                ${rows}
-              </div>
-            </div>`;
-          })()}
-        </div>
-        <div class="vc-player-col">
-          <div class="h2h-overview" id="vc-player-panel" style="min-height:120px;">
-            <div class="h2h-overview-title">${nameB.toUpperCase()} SEASON LEADERS</div>
-            <div id="vc-player-loading" style="padding:1rem 0.75rem;font-size:0.78rem;color:var(--text3);">Loading...</div>
-          </div>
-          <div class="h2h-overview" id="vc-l5-player-panel" style="min-height:120px;">
-            <div class="h2h-overview-title">${nameB.toUpperCase()} LAST 5 LEADERS</div>
-            <div id="vc-l5-player-loading" style="padding:1rem 0.75rem;font-size:0.78rem;color:var(--text3);">Loading...</div>
-          </div>
-          <div class="h2h-overview" id="vc-depth-panel" style="flex:0 0 auto;">
-            <div class="h2h-overview-title">SCORING DEPTH</div>
-            <div id="vc-depth-loading" style="padding:1rem 0.75rem;font-size:0.78rem;color:var(--text3);">Loading...</div>
-          </div>
-        </div>
-      </div>
-      <div style="margin-top:1rem;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
-        <div class="sched-header-row" style="border-radius:0;position:static;">
-          <span>LAST 5 GAMES</span><span>Opponent</span><span style="text-align:center">Result</span><span style="text-align:center">Score</span>
-          <span style="text-align:center">ES xG&#916;</span><span style="text-align:center">ES xGF</span><span style="text-align:center">ES xGA</span>
-          <span style="text-align:center">AS xG&#916;</span><span style="text-align:center">AS xGF</span><span style="text-align:center">AS xGA</span>
-        </div>
-        <div id="h2h-game-log">${h2hGameRowsHtml}</div>
-      </div>`;
-    content.querySelectorAll('#h2h-game-log .sched-game-row').forEach(row => {
-      row.addEventListener('click', () => {
-        const key = row.dataset.gamekey;
-        const existing = document.getElementById('sched-detail-' + key);
-        if (existing) { existing.remove(); row.classList.remove('expanded'); return; }
-        content.querySelectorAll('#h2h-game-log .sched-detail-row').forEach(d => d.remove());
-        content.querySelectorAll('#h2h-game-log .sched-game-row.expanded').forEach(r => r.classList.remove('expanded'));
-        row.classList.add('expanded');
-        const gameDate = row.dataset.date;
-        const homeT    = row.dataset.home;
-        const awayT    = row.dataset.away;
-        const gameRow  = allData.find(r => r.team === teamB && r.date === gameDate && r.homeTeam === homeT && r.awayTeam === awayT);
-        if (!gameRow) return;
-        const oppRow   = getOpponentRow(gameRow);
-        const isPo     = gameDate >= '2026-04-17';
-        row.insertAdjacentHTML('afterend', renderScheduleDetail(gameRow, oppRow, teamB, isPo));
-      });
-    });
-
-    // Fetch opponent season skater leaders + last 5 game logs from NHL API
-    (async () => {
-      const loadingEl   = document.getElementById('vc-player-loading');
-      const panelEl     = document.getElementById('vc-player-panel');
-      const l5LoadingEl = document.getElementById('vc-l5-player-loading');
-      const l5PanelEl   = document.getElementById('vc-l5-player-panel');
-      if (!panelEl) return;
-      try {
-        const PROXY = 'https://corsproxy.io/?url=';
-        const [statsRes, rosterRes] = await Promise.all([
-          fetch(`${PROXY}https://api-web.nhle.com/v1/club-stats/${teamB}/20252026/2`),
-          fetch(`${PROXY}https://api-web.nhle.com/v1/roster/${teamB}/current`)
-        ]);
-        if (!statsRes.ok || !rosterRes.ok) throw new Error('API error');
-        const statsData  = await statsRes.json();
-        const rosterData = await rosterRes.json();
-
-        // Build playerId -> sweaterNumber map from roster
-        const jerseyMap = {};
-        [...(rosterData.forwards||[]), ...(rosterData.defensemen||[]), ...(rosterData.goalies||[])].forEach(p => {
-          jerseyMap[p.id] = p.sweaterNumber;
-        });
-
-        const skaters = (statsData.skaters || []).sort((a,b) => b.points - a.points);
-        const fwds = skaters.filter(s => s.positionCode !== 'D').slice(0, 5);
-        const defs = skaters.filter(s => s.positionCode === 'D').slice(0, 3);
-
-        // Wider pool for L5
-        const fwdsPool = skaters.filter(s => s.positionCode !== 'D').slice(0, 12);
-        const defsPool = skaters.filter(s => s.positionCode === 'D').slice(0, 6);
-        const l5Pool   = [...fwdsPool, ...defsPool];
-
-        const GRID = '1fr 26px 26px 26px 26px 30px 30px 42px';
-
-        function buildHeaderRow() {
-          return `<div style="display:grid;grid-template-columns:${GRID};gap:0;align-items:center;padding:0.18rem 0.5rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);border-bottom:1px solid var(--border);">
-            <span>Player</span><span style="text-align:center;">GP</span><span style="text-align:center;">G</span><span style="text-align:center;">A</span><span style="text-align:center;">PTS</span><span style="text-align:center;">PIM</span><span style="text-align:center;">+/-</span><span style="text-align:center;">AVG TOI</span>
-          </div>`;
-        }
-
-        function buildSectionLabel(label) {
-          return `<div style="padding:0.3rem 0.5rem 0.1rem;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text3);">${label}</div>`;
-        }
-
-        function fmtTOI(secs) {
-          if (!secs) return '—';
-          const m = Math.floor(secs / 60);
-          const s = String(Math.round(secs % 60)).padStart(2, '0');
-          return `${m}:${s}`;
-        }
-
-        function seasonPlayerRow(p, isDef) {
-          const lastName = p.lastName.default.toUpperCase();
-          const num = jerseyMap[p.playerId] !== undefined ? jerseyMap[p.playerId] : '';
-          const displayName = `${num} ${lastName}`.trim();
-          const pos = isDef ? 'D' : p.positionCode;
-          const pm  = p.plusMinus >= 0 ? `+${p.plusMinus}` : `${p.plusMinus}`;
-          const toi = fmtTOI(p.avgTimeOnIcePerGame);
-          return `<div style="display:grid;grid-template-columns:${GRID};gap:0;align-items:center;padding:0.15rem 0.4rem;border-bottom:1px solid var(--border);font-size:0.71rem;">
-            <span style="color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${displayName}">${displayName} <span style="color:var(--text3);font-size:0.65rem;">${pos}</span></span>
-            <span style="text-align:center;color:var(--text2);">${p.gamesPlayed}</span>
-            <span style="text-align:center;color:var(--text2);">${p.goals}</span>
-            <span style="text-align:center;color:var(--text2);">${p.assists}</span>
-            <span style="text-align:center;font-weight:600;color:var(--text1);">${p.points}</span>
-            <span style="text-align:center;color:var(--text2);">${p.penaltyMinutes}</span>
-            <span style="text-align:center;color:var(--text2);font-size:0.68rem;">${pm}</span>
-            <span style="text-align:center;color:var(--text2);font-size:0.68rem;">${toi}</span>
-          </div>`;
-        }
-
-        // Render season box
-        if (loadingEl) loadingEl.remove();
-        panelEl.insertAdjacentHTML('beforeend',
-          buildHeaderRow()
-          + buildSectionLabel('Forwards') + fwds.map(p => seasonPlayerRow(p, false)).join('')
-          + buildSectionLabel('Defense')  + defs.map(p => seasonPlayerRow(p, true)).join('')
-        );
-
-        // Fetch last 5 game logs for wider pool in parallel
-        const logResults = await Promise.all(
-          l5Pool.map(p =>
-            fetch(`${PROXY}https://api-web.nhle.com/v1/player/${p.playerId}/game-log/20252026/2`)
-              .then(r => r.ok ? r.json() : null)
-              .catch(() => null)
-          )
-        );
-
-        // Get teamB's last 5 regular season game dates from Excel data
-        const teamBDates = new Set(
-          filtered.filter(r => r.team === teamB)
-            .slice(-5)
-            .map(r => r.date)
-        );
-
-        function getTeamGames(log) {
-          return (log && log.gameLog ? log.gameLog : [])
-            .filter(g => teamBDates.has(String(g.gameDate).substring(0, 10)));
-        }
-
-        function l5PlayerRow(p, isDef, log) {
-          const lastName = p.lastName.default.toUpperCase();
-          const num = jerseyMap[p.playerId] !== undefined ? jerseyMap[p.playerId] : '';
-          const displayName = `${num} ${lastName}`.trim();
-          const pos = isDef ? 'D' : p.positionCode;
-
-          const games = getTeamGames(log);
-          const gp  = games.length;
-          const g   = games.reduce((s,g) => s + (g.goals||0), 0);
-          const a   = games.reduce((s,g) => s + (g.assists||0), 0);
-          const pts = games.reduce((s,g) => s + (g.points||0), 0);
-          const pim = games.reduce((s,g) => s + (g.pim||0), 0);
-          const pm  = games.reduce((s,g) => s + (g.plusMinus||0), 0);
-          const pmStr = pm >= 0 ? `+${pm}` : `${pm}`;
-
-          let toiStr = '—';
-          if (gp > 0) {
-            const totalSecs = games.reduce((s, gm) => {
-              const t = gm.toi || gm.timeOnIce || gm.avgTimeOnIce || '0:00';
-              if (typeof t === 'string' && t.includes(':')) {
-                const parts = t.split(':');
-                return s + parseInt(parts[0]||0)*60 + parseInt(parts[1]||0);
-              }
-              return s + (typeof t === 'number' ? t : 0);
-            }, 0);
-            toiStr = fmtTOI(totalSecs / gp);
-          }
-
-          return `<div style="display:grid;grid-template-columns:${GRID};gap:0;align-items:center;padding:0.15rem 0.4rem;border-bottom:1px solid var(--border);font-size:0.71rem;">
-            <span style="color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${displayName}">${displayName} <span style="color:var(--text3);font-size:0.65rem;">${pos}</span></span>
-            <span style="text-align:center;color:var(--text2);">${gp}</span>
-            <span style="text-align:center;color:var(--text2);">${g}</span>
-            <span style="text-align:center;color:var(--text2);">${a}</span>
-            <span style="text-align:center;font-weight:600;color:var(--text1);">${pts}</span>
-            <span style="text-align:center;color:var(--text2);">${pim}</span>
-            <span style="text-align:center;color:var(--text2);font-size:0.68rem;">${pmStr}</span>
-            <span style="text-align:center;color:var(--text2);font-size:0.68rem;">${toiStr}</span>
-          </div>`;
-        }
-
-        const l5FwdsRanked = l5Pool
-          .map((p, i) => ({ p, log: logResults[i] }))
-          .filter(r => r.p.positionCode !== 'D')
-          .sort((a, b) => {
-            const ag = getTeamGames(a.log).reduce((s,g)=>s+(g.points||0),0);
-            const bg = getTeamGames(b.log).reduce((s,g)=>s+(g.points||0),0);
-            return bg - ag;
-          })
-          .slice(0, 5);
-
-        const l5DefsRanked = l5Pool
-          .map((p, i) => ({ p, log: logResults[i] }))
-          .filter(r => r.p.positionCode === 'D')
-          .sort((a, b) => {
-            const ag = getTeamGames(a.log).reduce((s,g)=>s+(g.points||0),0);
-            const bg = getTeamGames(b.log).reduce((s,g)=>s+(g.points||0),0);
-            return bg - ag;
-          })
-          .slice(0, 3);
-
-        if (l5LoadingEl) l5LoadingEl.remove();
-        if (l5PanelEl) l5PanelEl.insertAdjacentHTML('beforeend',
-          buildHeaderRow()
-          + buildSectionLabel('Forwards') + l5FwdsRanked.map(r => l5PlayerRow(r.p, false, r.log)).join('')
-          + buildSectionLabel('Defense')  + l5DefsRanked.map(r => l5PlayerRow(r.p, true,  r.log)).join('')
-        );
-
-        // Fetch teamA stats for depth score comparison
-        const depthLoadingEl = document.getElementById('vc-depth-loading');
-        const depthPanelEl   = document.getElementById('vc-depth-panel');
-        const statsARes = await fetch(`${PROXY}https://api-web.nhle.com/v1/club-stats/${teamA}/20252026/2`);
-        if (!statsARes.ok) throw new Error('API error');
-        const statsAData = await statsARes.json();
-
-        function depthScore(skatersArr) {
-          const fwdQual = skatersArr
-            .filter(p => p.positionCode !== 'D')
-            .filter(p => p.gamesPlayed >= 60 || (p.gamesPlayed > 0 && p.points / p.gamesPlayed >= 0.7));
-          const defQual = skatersArr
-            .filter(p => p.positionCode === 'D')
-            .filter(p => p.gamesPlayed >= 60 || (p.gamesPlayed > 0 && p.points / p.gamesPlayed >= 0.7))
-            .sort((a, b) => b.points - a.points)
-            .slice(0, 4);
-          const all = [...fwdQual, ...defQual];
-          if (!all.length) return { score: 0, n: 0 };
-          const avg = all.reduce((s, p) => s + p.points / p.gamesPlayed, 0) / all.length;
-          return { score: avg, n: all.length };
-        }
-
-        const dA = depthScore(statsAData.skaters || []);
-        const dB = depthScore(statsData.skaters || []);
-
-        const aColor = 'var(--team-a)';
-        const bColor = 'var(--team-b)';
-        const aWins  = dA.score >= dB.score;
-
-        if (depthLoadingEl) depthLoadingEl.remove();
-        if (depthPanelEl) depthPanelEl.insertAdjacentHTML('beforeend', `
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0.5rem 0.75rem 0.5rem;">
-            <div style="display:flex;flex-direction:column;align-items:center;gap:0.15rem;padding:0.35rem;">
-              <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:${aColor};">${nameA}</div>
-              <div style="font-size:1.4rem;font-weight:700;color:var(--text1);line-height:1.1;">${dA.score.toFixed(3)}</div>
-              <div style="font-size:0.6rem;color:var(--text3);">${dA.n} qualifying skaters</div>
-            </div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:0.15rem;padding:0.35rem;border-left:1px solid var(--border);">
-              <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:${bColor};">${nameB}</div>
-              <div style="font-size:1.4rem;font-weight:700;color:var(--text1);line-height:1.1;">${dB.score.toFixed(3)}</div>
-              <div style="font-size:0.6rem;color:var(--text3);">${dB.n} qualifying skaters</div>
-            </div>
-          </div>
-          <div style="padding:0 0.75rem 0.5rem;font-size:0.6rem;color:var(--text3);text-align:center;">Avg P/GP — qualifying forwards + top 4 D (60+ GP or 0.7+ P/GP)</div>
-        `);
-
-      } catch(e) {
-        if (loadingEl)   loadingEl.textContent   = 'Player data unavailable (requires internet)';
-        if (l5LoadingEl) l5LoadingEl.textContent = 'Player data unavailable (requires internet)';
-        const depthLoadingEl = document.getElementById('vc-depth-loading');
-        if (depthLoadingEl) depthLoadingEl.textContent = 'Depth data unavailable (requires internet)';
-      }
-    })();
-
-    return;
-  }
-
-  content.innerHTML=`
-    <!-- Season Overview + Last 5 side by side — TOP ROW -->
-    <div class="h2h-overview-wrapper">
-      <div class="h2h-overview">
-        <div class="h2h-overview-title">SEASON OVERVIEW</div>
-        <div class="h2h-overview-grid">
-          <div class="h2h-ov-header">Stat</div>
-          <div class="h2h-ov-header team-a">${fmtTeamHeader(nameA)}</div>
-          <div class="h2h-ov-header team-b">${fmtTeamHeader(nameB)}</div>
-          ${ovRowsHtml}
-        </div>
-      </div>
-      <div class="h2h-overview">
-        <div class="h2h-overview-title">LAST 5 GAMES</div>
-        <div class="h2h-overview-grid">
-          <div class="h2h-ov-header">Stat</div>
-          <div class="h2h-ov-header team-a">${fmtTeamHeader(nameA)}</div>
-          <div class="h2h-ov-header team-b">${fmtTeamHeader(nameB)}</div>
-          ${l5RowsHtml}
-        </div>
-      </div>
-    </div>
-
-    <!-- General + Special Teams + Goaltending — MIDDLE ROW -->
-    <div class="h2h-summary">
-      <!-- Box 1: GENERAL vs opponent -->
-      <div class="h2h-stat-block team-a">
-        <div class="h2h-team-name">GENERAL vs ${nameB}</div>
-        <div class="h2h-row"><span>Record vs ${teamB}</span><span class="h2h-val">${sA.w}-${sA.l}-${sA.otl}</span></div>
-        <div class="h2h-row"><span>GF-GA</span><span class="h2h-val">${sA.gf}-${sA.ga}</span></div>
-        <div class="h2h-row"><span>AS xGF</span><span class="h2h-val">${sA.axgf.toFixed(2)}</span></div>
-        <div class="h2h-row"><span>AS xGA</span><span class="h2h-val">${sA.axga.toFixed(2)}</span></div>
-        <div class="h2h-row"><span>ES xGF</span><span class="h2h-val">${sA.xgf.toFixed(2)}</span></div>
-        <div class="h2h-row"><span>ES xGA</span><span class="h2h-val">${sA.xga.toFixed(2)}</span></div>
-        <div class="h2h-row"><span>ES xGF/60</span><span class="h2h-val">${sA.xgf60.toFixed(2)}</span></div>
-        <div class="h2h-row"><span>ES xGA/60</span><span class="h2h-val">${sA.xga60.toFixed(2)}</span></div>
-        <div class="h2h-row"><span>ES xG Delta</span><span class="h2h-val">${colorDelta(sA.delta)}</span></div>
-        <div class="h2h-row"><span>ES xGF%</span><span class="h2h-val">${sA.xgfPct.toFixed(1)}%</span></div>
-      </div>
-      <!-- Box 2: SPECIAL TEAMS vs opponent -->
-      <div class="h2h-stat-block team-b">
-        <div class="h2h-team-name">SPECIAL TEAMS vs ${nameB}</div>
-        <div class="h2h-st-col-header" style="margin-top:0;">Power Play</div>
-        <div class="h2h-row"><span>PP</span><span class="h2h-val">${sA.ppGf}/${sA.ppDrawn}</span></div>
-        <div class="h2h-row"><span>PP xGF</span><span class="h2h-val">${sA.ppXgf.toFixed(2)}</span></div>
-        <div class="h2h-row"><span>PP Actual to Expected GF</span><span class="h2h-val">${colorDelta(sA.ppAxgf)}</span></div>
-        <div class="h2h-st-col-header" style="margin-top:0.6rem;">Penalty Kill</div>
-        <div class="h2h-row"><span>PK</span><span class="h2h-val">${sA.pkGa}/${sA.pkTaken}</span></div>
-        <div class="h2h-row"><span>PK xGA</span><span class="h2h-val">${sA.pkXga.toFixed(2)}</span></div>
-        <div class="h2h-row"><span>PK Actual to Expected GA</span><span class="h2h-val">${colorPkAxg(sA.pkAxga)}</span></div>
-      </div>
-      <!-- Box 3: GOALTENDING vs opponent -->
-      <div class="h2h-stat-block neutral">
-        <div class="h2h-team-name">GOALTENDING vs ${nameB}</div>
-        <div class="h2h-goalie-subtitle">All Strengths Saves Above Expected</div>
-        <div class="h2h-row"><span>${nameA}</span><span class="h2h-val" style="color:${sA.gsax>=0?'#067a3f':'#c0392b'}">${sA.gsax>=0?'+':''}${sA.gsax.toFixed(2)}</span></div>
-        <div class="h2h-row"><span>${nameB}</span><span class="h2h-val" style="color:${sB.gsax>=0?'#067a3f':'#c0392b'}">${sB.gsax>=0?'+':''}${sB.gsax.toFixed(2)}</span></div>
-        ${(()=>{const esSaxA=sA.xga-sA.esga; const esSaxB=sB.xga-sB.esga; return `
-        <div class="h2h-goalie-subtitle" style="margin-top:0.5rem;">ES Saves Above Expected</div>
-        <div class="h2h-row"><span>${nameA}</span><span class="h2h-val" style="color:${esSaxA>=0?'#067a3f':'#c0392b'}">${esSaxA>=0?'+':''}${esSaxA.toFixed(2)}</span></div>
-        <div class="h2h-row"><span>${nameB}</span><span class="h2h-val" style="color:${esSaxB>=0?'#067a3f':'#c0392b'}">${esSaxB>=0?'+':''}${esSaxB.toFixed(2)}</span></div>`;})()}
-        <div class="h2h-goalie-subtitle" style="margin-top:0.5rem;">PK Saves Above Expected</div>
-        ${(()=>{const pkSaxA=sA.pkXga-sA.pkGa; const pkSaxB=sB.pkXga-sB.pkGa; return `
-        <div class="h2h-row"><span>${nameA}</span><span class="h2h-val" style="color:${pkSaxA>=0?'#067a3f':'#c0392b'}">${pkSaxA>=0?'+':''}${pkSaxA.toFixed(2)}</span></div>
-        <div class="h2h-row"><span>${nameB}</span><span class="h2h-val" style="color:${pkSaxB>=0?'#067a3f':'#c0392b'}">${pkSaxB>=0?'+':''}${pkSaxB.toFixed(2)}</span></div>`;})()}
-      </div>
-    </div>
-
-    <!-- Games vs opponent — schedule-style -->
-    <div style="margin-top:1rem;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
-      <div class="sched-header-row" style="border-radius:0;position:static;">
-        <span>${nameA.toUpperCase()} VS ${nameB.toUpperCase()}</span><span>Opponent</span><span style="text-align:center">Result</span><span style="text-align:center">Score</span>
-        <span style="text-align:center">ES xG&#916;</span><span style="text-align:center">ES xGF</span><span style="text-align:center">ES xGA</span>
-        <span style="text-align:center">AS xG&#916;</span><span style="text-align:center">AS xGF</span><span style="text-align:center">AS xGA</span>
-      </div>
-      <div id="h2h-vs-log">${vsGameRowsHtml || '<div style="padding:0.75rem 1rem;color:var(--text3);font-size:0.82rem;">No games found.</div>'}</div>
-    </div>
-    <div style="margin-top:1rem;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
-      <div class="sched-header-row" style="border-radius:0;position:static;">
-        <span>LAST 5 GAMES</span><span>Opponent</span><span style="text-align:center">Result</span><span style="text-align:center">Score</span>
-        <span style="text-align:center">ES xG&#916;</span><span style="text-align:center">ES xGF</span><span style="text-align:center">ES xGA</span>
-        <span style="text-align:center">AS xG&#916;</span><span style="text-align:center">AS xGF</span><span style="text-align:center">AS xGA</span>
-      </div>
-      <div id="h2h-game-log">${h2hGameRowsHtml}</div>
-    </div>`;
-
-  // Wire vs log clicks (teamA perspective)
-  content.querySelectorAll('#h2h-vs-log .sched-game-row').forEach(row => {
-    row.addEventListener('click', () => {
-      const key = row.dataset.gamekey;
-      const existing = document.getElementById('sched-detail-' + key);
-      if (existing) { existing.remove(); row.classList.remove('expanded'); return; }
-      content.querySelectorAll('#h2h-vs-log .sched-detail-row').forEach(d => d.remove());
-      content.querySelectorAll('#h2h-vs-log .sched-game-row.expanded').forEach(r => r.classList.remove('expanded'));
-      row.classList.add('expanded');
-      const gameDate = row.dataset.date;
-      const homeT    = row.dataset.home;
-      const awayT    = row.dataset.away;
-      const gameRow  = allData.find(r => r.team === teamA && r.date === gameDate && r.homeTeam === homeT && r.awayTeam === awayT);
-      if (!gameRow) return;
-      const oppRow   = getOpponentRow(gameRow);
-      const isPo     = gameDate >= '2026-04-17';
-      row.insertAdjacentHTML('afterend', renderScheduleDetail(gameRow, oppRow, teamA, isPo));
-    });
-  });
-
-  // Wire last 5 log clicks (teamB perspective)
-  content.querySelectorAll('#h2h-game-log .sched-game-row').forEach(row => {
-    row.addEventListener('click', () => {
-      const key = row.dataset.gamekey;
-      const existing = document.getElementById('sched-detail-' + key);
-      if (existing) {
-        existing.remove();
-        row.classList.remove('expanded');
-        return;
-      }
-      content.querySelectorAll('#h2h-game-log .sched-detail-row').forEach(d => d.remove());
-      content.querySelectorAll('#h2h-game-log .sched-game-row.expanded').forEach(r => r.classList.remove('expanded'));
-      row.classList.add('expanded');
-      const gameDate = row.dataset.date;
-      const homeT    = row.dataset.home;
-      const awayT    = row.dataset.away;
-      const gameRow  = allData.find(r => r.team === teamB && r.date === gameDate && r.homeTeam === homeT && r.awayTeam === awayT);
-      if (!gameRow) return;
-      const oppRow   = getOpponentRow(gameRow);
-      const isPo     = gameDate >= '2026-04-17';
-      const detailHtml = renderScheduleDetail(gameRow, oppRow, teamB, isPo);
-      row.insertAdjacentHTML('afterend', detailHtml);
-    });
-  });
 </script>
 </body>
 </html>
